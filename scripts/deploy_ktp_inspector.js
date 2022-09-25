@@ -8,8 +8,8 @@ async function main() {
   if (network.name === "hardhat") {
     console.warn(
       "You are trying to deploy a contract to the Hardhat Network, which" +
-        "gets automatically created and destroyed every time. Use the Hardhat" +
-        " option '--network localhost'"
+      "gets automatically created and destroyed every time. Use the Hardhat" +
+      " option '--network localhost'"
     );
   }
 
@@ -20,19 +20,19 @@ async function main() {
     await deployer.getAddress()
   );
 
-  console.log("Account balance:", (await deployer.getBalance()).toString());
+  // console.log("Account balance:", (await deployer.getBalance()).toString());
 
-  const Token = await ethers.getContractFactory("Token");
-  const token = await Token.deploy();
-  await token.deployed();
+  const KtpInspector = await ethers.getContractFactory("KtpInspector");
+  const contract = await KtpInspector.deploy();
+  await contract.deployed();
 
-  console.log("Token address:", token.address);
+  console.log("Contract address:", contract.address);
 
   // We also save the contract's artifacts and address in the frontend directory
-  saveFrontendFiles(token);
+  saveFrontendFiles(contract);
 }
 
-function saveFrontendFiles(token) {
+function saveFrontendFiles(contract) {
   const fs = require("fs");
   const contractsDir = path.join(__dirname, "..", "frontend", "src", "contracts");
 
@@ -41,15 +41,15 @@ function saveFrontendFiles(token) {
   }
 
   fs.writeFileSync(
-    path.join(contractsDir, "contract-address.json"),
-    JSON.stringify({ Token: token.address }, undefined, 2)
+    path.join(contractsDir, "KtpInspector-address.json"),
+    JSON.stringify({ KtpInspector: contract.address }, undefined, 2)
   );
 
-  const TokenArtifact = artifacts.readArtifactSync("Token");
+  const KtpInspectorArtifacts = artifacts.readArtifactSync("KtpInspector");
 
   fs.writeFileSync(
-    path.join(contractsDir, "Token.json"),
-    JSON.stringify(TokenArtifact, null, 2)
+    path.join(contractsDir, "KtpInspector.json"),
+    JSON.stringify(KtpInspectorArtifacts, null, 2)
   );
 }
 
