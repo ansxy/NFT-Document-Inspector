@@ -1,0 +1,25 @@
+POST http://localhost:3001/api/formktp
+Content-Type: Application/JSON
+
+{
+  "addressWallet": "0x0000000000000000000000000000000000000000",
+  "nama": "JOHN DOE",
+  "kotaLahir": "BATU KAJANG",
+  "provinsiKotaLahir": "KALIMANTAN TIMUR",
+  "tanggalLahir": "2002-07-31",
+  "jenisKelamin": "LAKI-LAKI",
+  "statusPerkawinan": "BELUM KAWIN",
+  "golonganDarah": "A",
+  "kewarganegaraan": "WNI",
+  "pekerjaan": "SWASTA",
+  "agama": "ISLAM",
+  "berlakuHingga": "SEUMUR HIDUP",
+  "alamat": "BATU KAJANG",
+  "rukunTetangga": "001",
+  "rukunWarga": "000",
+  "kelurahan": "BATU KAJANG",
+  "kecamatan": "BATU SOPANG",
+  "kotaKtpDibuat": "PASER",
+  "provinsiKtpDibuat": "KALIMANTAN TIMUR",
+  "statusValidasi": "DIPROSES"
+}

@@ -1,5 +1,7 @@
 node_modules
 .idea
+.env
+fly.toml
 
 #Hardhat files
 cache
