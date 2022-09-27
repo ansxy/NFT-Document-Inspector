@@ -66,7 +66,7 @@ abstract contract Authorize{
     }
 
     function isAdmin(address _address) public view returns(bool) {
-        return UsersAddress[_address].isValid;
+        return UsersAddress[_address].role == 1 && UsersAddress[_address].isValid;
     }
 
     // === Modifier
