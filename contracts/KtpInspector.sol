@@ -1,93 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.3;
 
-// event Transfer(address indexed from, address indexed to, uint256 value);
-abstract contract Authorize{
-    struct account{
-        bool isValid;
-        uint8 role;
-        // Role :
-        // 1 SuperAdmin
-        // 2 Admin
-        // 3 user
-    }
-
-    mapping(address => account) public UsersAddress;
-     
-     // ===> new feat
-    event AdminAdded(
-        address indexed Caller,
-        address indexed NewAdmin
-    );
-
-    event AdminDeactivated(
-        address indexed Caller,
-        address indexed RemovedAdmin
-    );
-
-    event Userdeactivated(
-        address indexed Caller,
-        address indexed RemovedUser
-    );
-
-    event UserAdded(
-        address indexed Caller,
-        address indexed newUser
-    );
-    // ===
-
-    function addUser(address _address) public AdministratorOnly{
-        UsersAddress[_address].isValid = true;
-        UsersAddress[_address].role = 3;
-    }
-
-    function deactivateUser(address _address) public AdministratorOnly{
-        require(UsersAddress[_address].isValid,"User address not active");
-        UsersAddress[_address].isValid = false;
-    }
-
-    function addAdmin(address _address) public SuperAdminOnly {
-        require(!UsersAddress[_address].isValid,"address already admin active");
-        UsersAddress[_address].isValid = true;
-        UsersAddress[_address].role = 2;
-        // new feat
-        emit AdminAdded(msg.sender, _address);
-    }
-
-    function deactivateAdmin(address _address) public SuperAdminOnly {
-        require(UsersAddress[_address].isValid,"Admin address not active");
-        UsersAddress[_address].isValid = false;
-        // new feat
-        emit AdminDeactivated(msg.sender, _address);
-    }
-
-    function isSuperAdmin(address _address) public view returns(bool) {
-        return UsersAddress[_address].role == 1 && UsersAddress[_address].isValid;
-    }
-
-    function isAdmin(address _address) public view returns(bool) {
-        return UsersAddress[_address].role == 2 && UsersAddress[_address].isValid;
-    }
-
-    function isUser(address _address) public view returns(bool) {
-        return UsersAddress[_address].role == 3 && UsersAddress[_address].isValid;
-    }
-
-    // === Modifier
-
-    modifier AdministratorOnly(){
-        require((UsersAddress[msg.sender].role == 2 ||
-         UsersAddress[msg.sender].role == 1) && UsersAddress[msg.sender].isValid,
-         "Only admin and Superadmin can interact");
-        _;
-    }
-    modifier SuperAdminOnly(){
-        require(UsersAddress[msg.sender].role == 1 && UsersAddress[msg.sender].isValid,
-        "Only Superadmin can interact");
-        _;
-    }
-}
-
+import "./abstractcontracts/Authorize.sol";
 
 contract KtpInspector is Authorize {
 
@@ -142,7 +56,7 @@ contract KtpInspector is Authorize {
     }
 
     function addKtp (address Owner,address nftKtp, string memory DataNik, string memory Ipfs_Uri) public AdministratorOnly{
-        require(UsersAddress[Owner].isValid,"Owner not registered yet!");
+        require(isUser(Owner),"Owner not registered yet!");
         require(!UserToKtpData[Owner].Valid,"There's Already KTP Data");
         ktpOwnerCounter.push(Owner);
         KtpData storage newKTP = UserToKtpData[Owner];
