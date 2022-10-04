@@ -91,7 +91,7 @@ export const listPekerjaan = [
   "Wiraswasta",
 ];
 const listAgama = [
-  "ISMLAM",
+  "ISLAM",
   "KRISTEN KATOLIK",
   "KRISTEN PROTESTAN",
   "HINDU",
@@ -102,13 +102,13 @@ const listAgama = [
 
 export const jenisKelamin = ["LAKI-LAKI", "PEREMPUAN"];
 export const golonganDarah = ["A", "B", "AB", "O", "OB"];
-const statusPerkawinan = [
-  "BELUM MENIKAH",
-  "MENIKAH",
+export const statusPerkawinan = [
+  "BELUM KAWIN",
+  "KAWIN",
   "CERAI HIUDP",
   "CERAI MATI",
 ];
-const kewarganegaraan = ["WNI", "WNA"];
+export const kewarganegaraan = ["WNI", "WNA"];
 export const PekerjaanSelect = () => {
   return (
     <>
@@ -245,4 +245,6 @@ StatusPernikahanSelect,
 KewargaNegaraanSelect,
 listPekerjaan,
 jenisKelamin,
-golonganDarah);
+golonganDarah,
+kewarganegaraan,
+statusPerkawinan);

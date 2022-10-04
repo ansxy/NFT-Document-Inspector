@@ -73,7 +73,7 @@ export const SelectAsyncPaginateKec = (props) => {
   }, [props.kabKotaId]);
 
   const loadOptions = async (searchQuery, loadedOptions, { page }) => {
-    console.log(`loading page:${page} - limit: 10`);
+    // console.log(`loading page:${page} - limit: 10`);
     return await axios
       .get(
         `http://www.emsifa.com/api-wilayah-indonesia/api/districts/${kecematanId}.json`
@@ -101,11 +101,12 @@ export const SelectAsyncPaginateKec = (props) => {
     <AsyncPaginate
       className="w-full col-span-2"
       key={kecematanId}
+      isSearchable
+      // options={loadOptions}
       loadOptions={loadOptions}
       getOptionValue={(option) => option.id}
       getOptionLabel={(option) => option.name}
       onChange={onChange}
-      isSearchable={false}
       placeholder="Kecematan"
       additional={{
         page: 1,

@@ -1,6 +1,8 @@
 import axios from "axios";
-import React, { useEffect, useReducer, useState } from "react";
-import Async, { useAsync } from "react-select/async";
+import React, { useState } from "react";
+import Async from "react-select/async";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import {
   SelectAsyncPaginate,
   SelectAsyncPaginateKec,
@@ -8,17 +10,15 @@ import {
   SelectAsyncProvinsi,
 } from "./AsyncSelect.js";
 import {
-  KelaminSelect,
-  GolonganDarahSelect,
-  StatusPernikahanSelect,
-  KewargaNegaraanSelect,
   listPekerjaan,
   jenisKelamin,
   golonganDarah,
+  statusPerkawinan,
+  kewarganegaraan,
 } from "./BioDataSelect.js";
 
 const listAgama = [
-  "ISMLAM",
+  "ISLAM",
   "KRISTEN KATOLIK",
   "KRISTEN PROTESTAN",
   "HINDU",
@@ -34,17 +34,21 @@ export default function FormKtp() {
     kecamatan: "",
     idKecamatan: "",
     kelurahan: "",
-    tanggalLahir: "",
-    jenisKelamin: "",
+    tanggalLahir: new Date(),
+    statusPerkawinan: "",
     golonganDarah: "",
-    statusPernikahan: "",
     kewarganegaraan: "",
     pekerjaan: "",
     alamat: "",
     rukunTetangga: "",
     rukunWarga: "",
+    ukuran: 34,
+    tipeMime: "png",
+    namaFile: "NasaiGanteng",
+    addressWallet: "",
     berlakuHingga: "SEUMUR HIDUP",
     statusValidasi: "DIPROSES",
+    jenisKelamin: "",
   };
   let formAlamat = {
     idProv: "",
@@ -54,13 +58,37 @@ export default function FormKtp() {
   };
   const [formData, setFormData] = useState(intialDataForm);
   const [kodeTempat, setkodeTempat] = useState(formAlamat);
-  console.log(formData, kodeTempat);
+  const [startDate, setStartDate] = useState(new Date());
+  const date = new Date();
+  const today = date.setDate(date.getDate() + 0);
+  console.log(formData);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value.toUpperCase(),
     });
+  };
+
+  const handleDate = (e) => {
+    setFormData({
+      ...formData,
+      tanggalLahir: e,
+    });
+    setStartDate(e);
+  };
+
+  const handleImage = (e) => {
+    console.log(e);
+    console.log(e.target.files[0].size);
+    console.log(e.target.name);
+    setFormData({
+      ...formData,
+      namaFile: e.target.files[0].name,
+      ukuran: e.target.files[0].size,
+      tipeMime: e.target.files[0].type,
+    });
+    // setStartDate(e);
   };
 
   const handleSubmit = async (e) => {
@@ -128,6 +156,21 @@ export default function FormKtp() {
               onSubmit={handleSubmit}
               className="flex-grow flex-col mr-10 ml-10 mt-10 w-full"
             >
+              <div className="h-1/6 grid grid-rows-1">
+                <div className="h-full w-full flex place-items-center justify-center">
+                  <input
+                    name="addressWallet"
+                    id="addressWallet"
+                    value={formData.addressWallet}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
+                    h-2/5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
+                    rounded-lg col-span-2"
+                    placeholder="addressWallet"
+                    onInput={handleChange}
+                    required
+                  />
+                </div>
+              </div>
               {/* Section 1 */}
               <div className="h-1/4 grid grid-rows-4 ">
                 {/* Grid 1 in Section 1 */}
@@ -166,12 +209,12 @@ export default function FormKtp() {
                   <select
                     name="pekerjaan"
                     id="pekerjaan"
-                    onChange={handleChange}
                     value={formData.pekerjaan}
+                    onChange={handleChange}
                     className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5
           h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
                   >
-                    <option selected disabled value="">
+                    <option disabled value="">
                       Pekerjaan
                     </option>
                     {listPekerjaan.map((e) => (
@@ -184,6 +227,16 @@ export default function FormKtp() {
                 {/* Grid 2 in Section 1 */}
                 <div className="h-full w-full grid grid-cols-4 place-items-center gap-4">
                   <div className="relative w-full col-span-2">
+                    <DatePicker
+                      name="tanggalLahir"
+                      selected={startDate}
+                      dateFormat="yyyy/MM/dd"
+                      maxDate={today}
+                      onChange={handleDate}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block
+                       w-full h-5/6 pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 datepicker-input"
+                      placeholderText="Tanggal Lahir"
+                    />
                     <div className="flex absolute inset-y-0 left-0 items-center p-2.5 gap-4 pointer-events-none">
                       <svg
                         aria-hidden="true"
@@ -199,13 +252,6 @@ export default function FormKtp() {
                         ></path>
                       </svg>
                     </div>
-                    <input
-                      datepicker=""
-                      type="text"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block
-                       w-full h-5/6 pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 datepicker-input"
-                      placeholder="Tanggal Lahir"
-                    />
                   </div>
                   {/* Jenis Kelamin */}
                   <select
@@ -246,8 +292,40 @@ export default function FormKtp() {
                 </div>
                 {/* Grid 3 in Section 1 */}
                 <div className="h-full w-full grid grid-cols-4 place-items-center gap-4">
-                  <StatusPernikahanSelect />
-                  <KewargaNegaraanSelect />
+                  <select
+                    name="statusPerkawinan"
+                    id="StatusPernikahan"
+                    value={formData.statusPerkawinan}
+                    onChange={handleChange}
+                    className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5
+          h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
+                  >
+                    <option disabled value="">
+                      Status Pernikahan
+                    </option>
+                    {statusPerkawinan.map((e) => (
+                      <option key={e} value={e}>
+                        {e}
+                      </option>
+                    ))}
+                  </select>
+                  <select
+                    name="kewarganegaraan"
+                    id="KewargaNegaraan"
+                    value={formData.kewarganegaraan}
+                    onChange={handleChange}
+                    className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5
+          h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
+                  >
+                    <option selected disabled value="">
+                      KewargaNegaraan
+                    </option>
+                    {kewarganegaraan.map((e) => (
+                      <option key={e} value={e}>
+                        {e}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
               {/* Section 2 */}
@@ -296,6 +374,7 @@ export default function FormKtp() {
                 </div>
                 {/* Grid 2 in Section 2 */}
                 <div className="h-full w-full grid grid-cols-4 place-items-center gap-4">
+                  {/* Prov Select */}
                   <Async
                     cacheOptions
                     defaultOptions
@@ -303,6 +382,7 @@ export default function FormKtp() {
                     getOptionValue={(e) => e.id}
                     getOptionLabel={(e) => e.name}
                     onChange={onChangeSelect}
+                    isSearchable
                     loadOptions={SelectAsyncProvinsi}
                   />
                   <SelectAsyncPaginate
@@ -324,9 +404,12 @@ export default function FormKtp() {
                 {/* Grid 4 in Section 2 */}
                 <div className="h-full w-full grid grid-cols-4 place-items-center gap-4">
                   <input
-                    class="block w-full h-5/6 col-span-2 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                    className="block w-full h-5/6 col-span-2 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                     id="file_input"
+                    name="foto_ktp"
+                    accept="image/*"
                     type="file"
+                    onInput={handleImage}
                   />
 
                   <button

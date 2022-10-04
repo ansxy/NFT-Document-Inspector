@@ -5,6 +5,7 @@ export default function NavLinks() {
   const links = [
     { name: "Form KTP", url: "/formktp" },
     { name: "Form Sertikat Tanah", url: "/formsertifikattanah" },
+    { name: "Form Validator ", url: "/formvalidator" },
   ];
   return (
     <>

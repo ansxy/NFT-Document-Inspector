@@ -18,6 +18,10 @@ const router = createBrowserRouter([
     path: "/formsertifikattanah",
     element: <div>Form Sertifikat Tanah!</div>,
   },
+  {
+    path: "/formvalidator",
+    element: <div>Form validator</div>,
+  },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
