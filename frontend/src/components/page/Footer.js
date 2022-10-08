@@ -5,7 +5,7 @@ export default function Footer() {
     <>
       <div className="flex justify-center items-center">
         <div className="w-screen bg-white flex justify-center">
-          <h1>Made With Depression and Sanity ❤️</h1>
+          <h1>Made With ❤️</h1>
         </div>
       </div>
     </>

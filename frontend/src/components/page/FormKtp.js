@@ -8,7 +8,7 @@ import {
   SelectAsyncPaginateKec,
   SelectAsyncPaginateKel,
   SelectAsyncProvinsi,
-} from "./AsyncSelect.js";
+} from "../api/AsyncSelect.js";
 import {
   listPekerjaan,
   jenisKelamin,
@@ -27,7 +27,9 @@ const listAgama = [
   "JAWA",
 ];
 export default function FormKtp() {
-  let intialDataForm = {
+  let formData2 = new FormData();
+  formData2 = {
+    addressWallet: "",
     nama: "",
     kotaLahir: "",
     provinsiKotaLahir: "",
@@ -42,26 +44,23 @@ export default function FormKtp() {
     alamat: "",
     rukunTetangga: "",
     rukunWarga: "",
-    ukuran: 34,
-    tipeMime: "png",
-    namaFile: "NasaiGanteng",
-    addressWallet: "",
     berlakuHingga: "SEUMUR HIDUP",
     statusValidasi: "DIPROSES",
     jenisKelamin: "",
+    file: "",
   };
+
   let formAlamat = {
     idProv: "",
     idKota: "",
     idKec: "",
     idKel: "",
   };
-  const [formData, setFormData] = useState(intialDataForm);
+  const [formData, setFormData] = useState(formData2);
   const [kodeTempat, setkodeTempat] = useState(formAlamat);
   const [startDate, setStartDate] = useState(new Date());
   const date = new Date();
   const today = date.setDate(date.getDate() + 0);
-  console.log(formData);
 
   const handleChange = (e) => {
     setFormData({
@@ -79,23 +78,22 @@ export default function FormKtp() {
   };
 
   const handleImage = (e) => {
-    console.log(e);
-    console.log(e.target.files[0].size);
-    console.log(e.target.name);
     setFormData({
       ...formData,
-      namaFile: e.target.files[0].name,
-      ukuran: e.target.files[0].size,
-      tipeMime: e.target.files[0].type,
+      file: e.target.files[0],
     });
-    // setStartDate(e);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    console.log(formData);
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
     try {
-      await axios.post("http://localhost:3001/api/formktp", formData);
+      await axios.post("http://localhost:3001/api/formktp", formData, config);
     } catch (err) {
       console.log(err);
     }
@@ -142,9 +140,10 @@ export default function FormKtp() {
       idKel: item.id,
     });
   };
+
   return (
     <>
-      <div className="flex flex-grow justify-center bg-black">
+      <div className="flex flex-grow justify-center ">
         <div className="flex flex-col w-3/5 h-full justify-start items-center">
           <div className="w-full flex items-center justify-center h-auto bg-white rounded-t-lg border-b-2 mt-10">
             <h2 className="text-black uppercase text-2xl m-5 font-bold">
@@ -154,10 +153,12 @@ export default function FormKtp() {
           <div className="flex flex-grow bg-white w-full">
             <form
               onSubmit={handleSubmit}
+              method="post"
+              encType="multipart/form-data"
               className="flex-grow flex-col mr-10 ml-10 mt-10 w-full"
             >
               <div className="h-1/6 grid grid-rows-1">
-                <div className="h-full w-full flex place-items-center justify-center">
+                <div className="h-full w-full flex place-items-center justify-center ">
                   <input
                     name="addressWallet"
                     id="addressWallet"
@@ -214,11 +215,19 @@ export default function FormKtp() {
                     className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5
           h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
                   >
-                    <option disabled value="">
+                    <option
+                      selected={formData.pekerjaan === ""}
+                      disabled
+                      value=""
+                    >
                       Pekerjaan
                     </option>
                     {listPekerjaan.map((e) => (
-                      <option key={e} value={e}>
+                      <option
+                        key={e}
+                        value={e}
+                        selected={formData.pekerjaan === e}
+                      >
                         {e}
                       </option>
                     ))}
