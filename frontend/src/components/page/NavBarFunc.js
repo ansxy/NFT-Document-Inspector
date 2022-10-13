@@ -45,10 +45,10 @@ export default function NavBarNew() {
   return (
     <>
       {haveMetamask ? (
-        <nav className="bg-white">
+        <nav className="bg-[-#0066FF]">
           <div className="flex items-center font-medium justify-around">
-            <ul className="md:flex hidden uppercase items-center gap-44">
-              <Link to="/" className="py-7 px-3 inline-block ">
+            <ul className="md:flex hidden uppercase items-center gap-44 px-5 rounded-b-2xl drop-shadow-lg bg-[#001577]">
+              <Link to="/" className="py-7 px-3 inline-block text-cyan-50">
                 Home
               </Link>
               {isConnected ? <></> : <></>}

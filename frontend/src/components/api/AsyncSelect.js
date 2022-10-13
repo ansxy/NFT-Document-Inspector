@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { AsyncPaginate } from "react-select-async-paginate";
 import axios from "axios";
 
+
+
 export const SelectAsyncProvinsi = async (params) => {
   return await axios
     .get(`http://www.emsifa.com/api-wilayah-indonesia/api/provinces.json`)
@@ -14,11 +16,12 @@ export const SelectAsyncProvinsi = async (params) => {
 
 export const SelectAsyncPaginate = (props) => {
   const [provId, setprovId] = useState("");
+  // const [isDisabled, setisDisabled] = useState(true);
   useEffect(() => {
     setprovId(props.regionId);
   }, [props.regionId]);
 
-  const loadOptions = async (searchQuery, loadedOptions, { page }) => {
+  const loadOptions = async (searchQuery, { page }) => {
     console.log(`loading page:${page} - limit: 10`);
     console.log(provId);
     return await axios
@@ -48,6 +51,7 @@ export const SelectAsyncPaginate = (props) => {
     <AsyncPaginate
       className="w-full col-span-2"
       key={provId}
+      isDisabled={false}
       loadOptions={loadOptions}
       getOptionValue={(option) => option.id}
       getOptionLabel={(option) => option.name}
@@ -120,6 +124,7 @@ SelectAsyncPaginateKec.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func,
 };
+
 export const SelectAsyncPaginateKel = (props) => {
   const [kelurhanaId, setkelurhanaId] = useState("");
   useEffect(() => {

@@ -1,157 +1,13 @@
-import React, { useState } from "react";
-import Async from "react-select/async";
+import react from "react";
+import { useLoaderData } from "react-router-dom";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import ReactSelect from "react-select";
 
-import {
-  SelectAsyncPaginate,
-  SelectAsyncPaginateKec,
-  SelectAsyncPaginateKel,
-  SelectAsyncProvinsi,
-} from "../api/AsyncSelect.js";
-import {
-  listPekerjaan,
-  jenisKelamin,
-  golonganDarah,
-  statusPerkawinan,
-  kewarganegaraan,
-  listAgama,
-} from "./BioDataSelect.js";
-import moment from "moment/moment.js";
-import axios from "axios";
-
-export default function FormKtp() {
-  let data = new FormData();
-  data = {
-    addressWallet: "",
-    nama: "",
-    kotaLahir: "",
-    provinsiKotaLahir: "",
-    kecamatan: "",
-    idKecamatan: "",
-    kelurahan: "",
-    tanggalLahir: new Date(),
-    statusPerkawinan: "",
-    golonganDarah: "",
-    kewarganegaraan: "",
-    pekerjaan: "",
-    alamat: "",
-    rukunTetangga: "",
-    rukunWarga: "",
-    berlakuHingga: "SEUMUR HIDUP",
-    statusValidasi: "DIPROSES",
-    jenisKelamin: "",
-    file: "",
-  };
-
-  let formAlamat = {
-    idProv: "",
-    idKota: "",
-    idKec: "",
-    idKel: "",
-  };
-  const [formData, setFormData] = useState(data);
-  const [kodeTempat, setkodeTempat] = useState(formAlamat);
-  const [startDate, setStartDate] = useState(new Date());
-
-  const date = new Date();
-  const today = date.setDate(date.getDate() + 0);
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleDate = (e) => {
-    setFormData({
-      ...formData,
-      tanggalLahir: e,
-    });
-    setStartDate(e);
-  };
-
-  const handleImage = (e) => {
-    setFormData({
-      ...formData,
-      file: e.target.files[0],
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const addresWalletEth = new RegExp("^0x[a-fA-F0-9]{40}$/g");
-    const config = {
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-    };
-    if (
-      moment(formData.tanggalLahir, "dd/MM/YYYY").fromNow().split(" ")[0] <= 16
-    ) {
-      console.log("Umur Belum Mencukupi");
-    }
-    if (addresWalletEth.test(formData.addressWallet)) {
-      console.log("tidak valid addres wallet");
-    } else {
-      try {
-        return await axios.post(
-          "http://localhost:3001/api/formktp",
-          formData,
-          config
-        );
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  };
-
-  const onChangeSelect = (item) => {
-    setFormData({
-      ...formData,
-      provinsiKotaLahir: item.name.toUpperCase(),
-    });
-    setkodeTempat({
-      ...kodeTempat,
-      idProv: item.id,
-    });
-  };
-  const onChangeSelectKab = (item) => {
-    setFormData({
-      ...formData,
-      kotaLahir: item.name.toUpperCase(),
-    });
-    setkodeTempat({
-      ...kodeTempat,
-      idKota: item.id,
-    });
-  };
-  const onChangeSelectKec = (item) => {
-    setFormData({
-      ...formData,
-      kecamatan: item.name.toUpperCase(),
-      idKecamatan: item.id,
-    });
-    setkodeTempat({
-      ...kodeTempat,
-      idKec: item.id,
-    });
-  };
-  const onChangeSelectKel = (item) => {
-    setFormData({
-      ...formData,
-      kelurahan: item.name.toUpperCase(),
-    });
-    setkodeTempat({
-      ...kodeTempat,
-      idKel: item.id,
-    });
-  };
-
+export default function DetailPage() {
+  const data = useLoaderData();
   return (
     <>
-      <div className="flex basis-full justify-center ">
+      <div className="flex  justify-center ">
         <div className="flex flex-col w-3/5 justify-start items-center">
           <div className="w-full flex items-center justify-center h-auto bg-white rounded-t-lg border-b-2 mt-10">
             <h2 className="text-black uppercase text-2xl m-5 font-bold">
@@ -160,7 +16,6 @@ export default function FormKtp() {
           </div>
           <div className="flex flex-auto bg-white w-full h-screen">
             <form
-              onSubmit={handleSubmit}
               method="post"
               encType="multipart/form-data"
               className=" flex-col mr-10 ml-10 mt-10 w-full gap-4"
@@ -170,12 +25,10 @@ export default function FormKtp() {
                   <input
                     name="addressWallet"
                     id="addressWallet"
-                    value={formData.addressWallet}
+                    value={data.data.addressWallet}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
-                    rounded-lg col-span-2"
-                    placeholder="addressWallet"
-                    onInput={handleChange}
-                    required
+                  rounded-lg col-span-2"
+                    disabled
                   />
                 </div>
               </div>
@@ -187,59 +40,37 @@ export default function FormKtp() {
                   <input
                     name="nama"
                     id="nama"
-                    value={formData.nama}
+                    disabled
+                    value={data.data.nama}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
-                    h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
-                    rounded-lg col-span-2"
-                    placeholder="Nama"
-                    onInput={handleChange}
-                    required
+                  h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
+                  rounded-lg col-span-2"
                   />
                   {/* Agama Select */}
                   <select
                     name="agama"
                     id="agama"
-                    value={formData.agama}
-                    onChange={handleChange}
-                    required
+                    disabled
+                    value={data.data.agama}
                     className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5
-          h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
+        h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
                   >
-                    <option selected disabled value=" ">
-                      Agama
+                    <option selected value={data.data.agama}>
+                      {data.data.agama}
                     </option>
-                    {listAgama.map((e) => (
-                      <option key={e} value={e}>
-                        {e}
-                      </option>
-                    ))}
                   </select>
                   {/* Pekerjaan Select */}
                   <select
                     name="pekerjaan"
                     id="pekerjaan"
-                    value={formData.pekerjaan}
-                    onChange={handleChange}
-                    required
+                    value={data.data.pekerjaan}
+                    disabled
                     className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5
-          h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
+        h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
                   >
-                    <option
-                      selected={formData.pekerjaan === ""}
-                      disabled
-                      value=""
-                    >
-                      Pekerjaan
+                    <option selected value={data.data.pekerjaan}>
+                      {data.data.pekerjaan}
                     </option>
-                    {listPekerjaan.map((e) => (
-                      <option
-                        key={e}
-                        value={e}
-                        selected={formData.pekerjaan === e}
-                      >
-                        {e}
-                      </option>
-                    ))}
                   </select>
                 </div>
                 {/* Grid 2 in Section 1 */}
@@ -247,12 +78,9 @@ export default function FormKtp() {
                   <div className="relative w-full col-span-2">
                     <DatePicker
                       name="tanggalLahir"
-                      selected={startDate}
-                      dateFormat="yyyy/MM/dd"
-                      maxDate={today}
-                      onChange={handleDate}
-                      showYearDropdown
-                      dropdownMode="select"
+                      value={data.data.tanggalLahir}
+                      dateFormat="dd/MM/yyyy"
+                      disabled
                       className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block
                        w-full h-5/6 pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 datepicker-input"
                       placeholderText="Tanggal Lahir"
@@ -278,74 +106,57 @@ export default function FormKtp() {
                   <select
                     name="jenisKelamin"
                     id="Kelamin"
-                    value={formData.jenisKelamin}
-                    onChange={handleChange}
+                    value={data.data.jenisKelamin}
+                    disabled
                     className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5
           h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
                   >
-                    <option selected disabled value="">
-                      Kelamin
+                    <option selected value={data.data.jenisKelamin}>
+                      {data.data.jenisKelamin}
                     </option>
-                    {jenisKelamin.map((e) => (
-                      <option key={e} value={e}>
-                        {e}
-                      </option>
-                    ))}
                   </select>
                   {/* Golongan Darah */}
                   <select
                     name="golonganDarah"
                     id="golonganDarah"
-                    value={formData.golonganDarah}
-                    onChange={handleChange}
+                    value={data.data.golonganDarah}
+                    disabled
                     className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5
           h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
                   >
-                    <option disabled={true} value="">
-                      Golongan Darah
+                    {" "}
+                    <option selected value={data.data.golonganDarah}>
+                      {data.data.golonganDarah}
                     </option>
-                    {golonganDarah.map((e) => (
-                      <option key={e} value={e}>
-                        {e}
-                      </option>
-                    ))}
                   </select>
                 </div>
                 {/* Grid 3 in Section 1 */}
-                <div className="h-full w-full grid grid-cols-4 place-items-center gap-4">
+                <div className="w-full grid grid-cols-4 place-items-center gap-4">
                   <select
                     name="statusPerkawinan"
                     id="StatusPernikahan"
-                    value={formData.statusPerkawinan}
-                    onChange={handleChange}
+                    value={data.data.statusPerkawinan}
+                    disabled
                     className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5
          dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
                   >
-                    <option disabled value="">
-                      Status Pernikahan
+                    {" "}
+                    <option selected value={data.data.statusPerkawinan}>
+                      {data.data.statusPerkawinan}
                     </option>
-                    {statusPerkawinan.map((e) => (
-                      <option key={e} value={e}>
-                        {e}
-                      </option>
-                    ))}
                   </select>
                   <select
                     name="kewarganegaraan"
                     id="KewargaNegaraan"
-                    value={formData.kewarganegaraan}
-                    onChange={handleChange}
+                    value={data.data.kewarganegaraan}
+                    disabled
                     className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5
            dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
                   >
-                    <option selected disabled value="">
-                      KewargaNegaraan
+                    {" "}
+                    <option selected value={data.data.kewarganegaraan}>
+                      {data.data.kewarganegaraan}
                     </option>
-                    {kewarganegaraan.map((e) => (
-                      <option key={e} value={e}>
-                        {e}
-                      </option>
-                    ))}
                   </select>
                 </div>
               </div>
@@ -358,10 +169,10 @@ export default function FormKtp() {
                     name="alamat"
                     type="text"
                     id="alamat"
-                    value={formData.alamat}
-                    onChange={handleChange}
+                    value={data.data.alamat}
                     placeholder="Alamat"
                     required
+                    disabled
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                     h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
                     rounded-lg col-span-2"
@@ -371,8 +182,8 @@ export default function FormKtp() {
                     name="rukunTetangga"
                     type="text"
                     id="rt"
-                    value={formData.rukunTetangga}
-                    onChange={handleChange}
+                    value={data.data.rukunTetangga}
+                    disabled
                     placeholder="RT"
                     required
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
@@ -384,8 +195,8 @@ export default function FormKtp() {
                     name="rukunWarga"
                     type="text"
                     id="rw"
-                    value={formData.rukunWarga}
-                    onChange={handleChange}
+                    value={data.data.rukunWarga}
+                    disabled
                     placeholder="RW"
                     required
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
@@ -396,42 +207,32 @@ export default function FormKtp() {
                 {/* Grid 2 in Section 2 */}
                 <div className="h-full w-full grid grid-cols-4 place-items-center gap-4">
                   {/* Prov Select */}
-                  <Async
-                    cacheOptions
-                    defaultOptions
+                  <ReactSelect
                     className="w-full col-span-2"
-                    getOptionValue={(e) => e.id}
-                    getOptionLabel={(e) => e.name}
-                    onChange={onChangeSelect}
-                    loadOptions={SelectAsyncProvinsi}
+                    isDisabled
+                    placeholder={data.data.provinsiKotaLahir}
                   />
-                  <SelectAsyncPaginate
-                    regionId={kodeTempat.idProv}
-                    onChange={(kab) => onChangeSelectKab(kab)}
+                  <ReactSelect
+                    className="w-full col-span-2"
+                    isDisabled
+                    placeholder={data.data.kotaLahir}
                   />
                 </div>
                 {/* Grid 3 in Section 2 */}
                 <div className="h-full w-full grid grid-cols-4 place-items-center gap-4">
-                  <SelectAsyncPaginateKec
-                    kabKotaId={kodeTempat.idKota}
-                    onChange={(kec) => onChangeSelectKec(kec)}
+                  <ReactSelect
+                    className="w-full col-span-2"
+                    isDisabled
+                    placeholder={data.data.kecamatan}
                   />
-                  <SelectAsyncPaginateKel
-                    kelId={kodeTempat.idKec}
-                    onChange={(kel) => onChangeSelectKel(kel)}
+                  <ReactSelect
+                    className="w-full col-span-2"
+                    isDisabled
+                    placeholder={data.data.kelurahan}
                   />
                 </div>
                 {/* Grid 4 in Section 2 */}
                 <div className="w-full grid grid-cols-4 place-items-center gap-4">
-                  <input
-                    className="block w-full -p col-span-2 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                    id="file_input"
-                    name="foto_ktp"
-                    accept="image/*"
-                    type="file"
-                    onInput={handleImage}
-                  />
-
                   <button
                     id="dropdownDefault"
                     style={{ transition: "all .15s ease" }}
@@ -443,6 +244,15 @@ export default function FormKtp() {
                   </button>
                 </div>
               </div>
+              <img
+                className="w-36 h-36"
+                src={
+                  process.env.REACT_APP_BASE_URL +
+                  data.data.addressWallet +
+                  ".jpg"
+                }
+                alt="test"
+              />
             </form>
           </div>
         </div>

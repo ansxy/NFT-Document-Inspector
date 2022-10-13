@@ -90,7 +90,7 @@ export const listPekerjaan = [
   "Biarawati",
   "Wiraswasta",
 ].map((it) => it.toUpperCase());
-const listAgama = [
+export const listAgama = [
   "ISLAM",
   "KRISTEN KATOLIK",
   "KRISTEN PROTESTAN",
@@ -111,6 +111,7 @@ export const statusPerkawinan = [
 export const kewarganegaraan = ["WNI", "WNA"];
 
 export default (listPekerjaan,
+listAgama,
 jenisKelamin,
 golonganDarah,
 kewarganegaraan,

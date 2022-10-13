@@ -118,7 +118,7 @@ FormKtp.init(
       type: DataTypes.ENUM(
         "ISLAM",
         "KRISTEN",
-        "KATHOLIK",
+        "KRISTEN KATHOLIK",
         "HINDU",
         "BUDDHA",
         "KONGHUCU"

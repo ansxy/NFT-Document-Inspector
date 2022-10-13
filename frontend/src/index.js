@@ -4,6 +4,9 @@ import PageFormKTP from "./pages/P_FormKTP";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Dashboard from "./pages/dashboard";
 import PageValidator from "./pages/P_Validator";
+import PageFormSertifikatTanah from "./pages/P_FormSertifikatTanah";
+import axios from "axios";
+import PageDetail from "./pages/P_DetailPage";
 
 const router = createBrowserRouter([
   {
@@ -16,11 +19,25 @@ const router = createBrowserRouter([
   },
   {
     path: "/formsertifikattanah",
-    element: <div>Form Sertifikat Tanah!</div>,
+    element: <PageFormSertifikatTanah />,
   },
   {
     path: "/formvalidator",
     element: <PageValidator />,
+  },
+  {
+    element: <PageDetail />,
+    path: "/formvalidator/:addressWallet",
+    loader: async ({ request, params }) => {
+      try {
+        const url = "http://localhost:3001/api/formktp/";
+        const urlFull = url + params.addressWallet;
+        const result = await axios.get(urlFull);
+        return result;
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
 ]);
 

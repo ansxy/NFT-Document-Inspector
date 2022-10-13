@@ -1,7 +1,6 @@
 const axios = require('axios');
 require('dotenv').config()
 
-// TODO: insert this url below to .env file
 const baseUrl = process.env.BASE_URL;
 
 const getImgBytecode = async (filename, mimetype, doc) => {
