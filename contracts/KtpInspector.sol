@@ -37,13 +37,7 @@ contract KtpInspector is Authorize {
         address indexed Owner
     );
 
-    function findKtp(address Owner) public view returns(KtpData memory)  {
-        require(
-            (UsersAddress[msg.sender].role == 1 && UsersAddress[msg.sender].isValid) || 
-            (UsersAddress[msg.sender].role == 2 && UsersAddress[msg.sender].isValid) ||
-            Owner == msg.sender,
-            "You can't access this data"
-        );
+    function findKtp(address Owner) public view DocumentOwnerOnly(Owner) returns(KtpData memory) {
         KtpData memory ktp;
         for(uint i; i<ktpOwnerCounter.length;i++){
             if(ktpOwnerCounter[i] == Owner){

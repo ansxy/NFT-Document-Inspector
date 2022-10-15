@@ -35,6 +35,7 @@ abstract contract Authorize{
     // ===
 
     function addUser(address _address) public AdministratorOnly{
+        require(UsersAddress[_address].role != 1 && UsersAddress[_address].role != 2 , "The Wallet Address must not admin or superadmin" );
         UsersAddress[_address].isValid = true;
         UsersAddress[_address].role = 3;
     }
@@ -73,10 +74,22 @@ abstract contract Authorize{
 
     // === Modifier
 
+    modifier DocumentOwnerOnly(address _address){
+        require(
+            (
+                UsersAddress[msg.sender].role == 2 ||
+                UsersAddress[msg.sender].role == 1 ||
+                _address == msg.sender
+            ) && UsersAddress[msg.sender].isValid,
+            "You are not the document owner"
+            );
+        _;
+    }
+
     modifier AdministratorOnly(){
         require((UsersAddress[msg.sender].role == 2 ||
-         UsersAddress[msg.sender].role == 1) && UsersAddress[msg.sender].isValid,
-         "Only admin and Superadmin can interact");
+        UsersAddress[msg.sender].role == 1) && UsersAddress[msg.sender].isValid,
+        "Only admin and Superadmin can interact");
         _;
     }
     modifier SuperAdminOnly(){
