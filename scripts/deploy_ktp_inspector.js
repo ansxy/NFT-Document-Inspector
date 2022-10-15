@@ -8,8 +8,8 @@ async function main() {
   if (network.name === "hardhat") {
     console.warn(
       "You are trying to deploy a contract to the Hardhat Network, which" +
-      "gets automatically created and destroyed every time. Use the Hardhat" +
-      " option '--network localhost'"
+        "gets automatically created and destroyed every time. Use the Hardhat" +
+        " option '--network localhost'"
     );
   }
 
@@ -26,6 +26,11 @@ async function main() {
   const contract = await KtpInspector.deploy();
   await contract.deployed();
 
+  const temp = await contract.isSuperAdmin(
+    "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
+  );
+  console.log(temp);
+
   console.log("Contract address:", contract.address);
 
   // We also save the contract's artifacts and address in the frontend directory
@@ -34,7 +39,13 @@ async function main() {
 
 function saveFrontendFiles(contract) {
   const fs = require("fs");
-  const contractsDir = path.join(__dirname, "..", "frontend", "src", "contracts");
+  const contractsDir = path.join(
+    __dirname,
+    "..",
+    "frontend",
+    "src",
+    "contracts"
+  );
 
   if (!fs.existsSync(contractsDir)) {
     fs.mkdirSync(contractsDir);

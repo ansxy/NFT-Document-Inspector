@@ -13,6 +13,8 @@ export default function NavBarNew() {
   const { ethereum } = window;
   const provider = new ethers.providers.Web3Provider(window.ethereum);
 
+  console.log(accountAddress);
+
   useEffect(() => {
     const { ethereum } = window;
     const checkMetamaskAvailability = async () => {

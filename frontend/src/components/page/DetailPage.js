@@ -1,10 +1,83 @@
-import react from "react";
+import react, { useEffect, useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import ReactSelect from "react-select";
+import { ethers } from "ethers";
+import KtpNFT from "../../contracts/KtpNFT.json";
+import KtpNFT_address from "../../contracts/KtpNFT-address.json";
+import KtpInspector from "../../contracts/KtpInspector.json";
+import KtpInspectorAddress from "../../contracts/KtpInspector-address.json";
+import { setNftUri } from "../../utils/method";
+
+const provider = new ethers.providers.Web3Provider(window.ethereum);
+const signer = provider.getSigner();
+const contractKtp = new ethers.Contract(
+  KtpNFT_address.KtpNFT,
+  KtpNFT.abi,
+  signer
+);
+
+const contractInspector = new ethers.Contract(
+  KtpInspectorAddress.KtpInspector,
+  KtpInspector.abi,
+  signer
+);
+console.log(contractInspector);
 
 export default function DetailPage() {
   const data = useLoaderData();
+  const [uri, seturi] = useState("");
+  // const [status, setStatus] = useState(false)
+
+  // const getMintedStatus = async () => {
+  //   const result = await contractKtp.isContentOwned(uri);
+  //   console.log(result)
+  //   setStatus(result);
+  // };
+
+  const mintToken = async (e) => {
+    e.preventDefault();
+    const connection = contractKtp.connect(signer);
+    const addr = connection.address;
+    const result = await contractKtp.safeMint(addr, uri);
+    return result;
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      const uri = await setNftUri(data.data.addressWallet, "ktp");
+      return seturi(uri);
+    };
+    fetchData();
+  }, [data.data.addressWallet]);
+
+  const addKtp = async (e) => {
+    e.preventDefault();
+    const addr = data.data.addressWallet;
+    console.log(addr);
+    const result = await contractInspector.addKtp(
+      addr,
+      "0x878e1A62DA94Ce949F1adb47e4D87E5f4e369b16",
+      "64120231123",
+      uri
+    );
+    console.log(result);
+    return result;
+  };
+
+  const findKTP = async (e) => {
+    e.preventDefault();
+    try {
+      const connection = contractKtp.connect(signer);
+      const addr = connection.address;
+      console.log(addr);
+      const result = await contractInspector.findKtp(
+        "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266"
+      );
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <div className="flex  justify-center ">
@@ -15,11 +88,7 @@ export default function DetailPage() {
             </h2>
           </div>
           <div className="flex flex-auto bg-white w-full h-screen">
-            <form
-              method="post"
-              encType="multipart/form-data"
-              className=" flex-col mr-10 ml-10 mt-10 w-full gap-4"
-            >
+            <div className=" flex-col mr-10 ml-10 mt-10 w-full gap-4">
               <div className="h-1/6 grid grid-rows-1">
                 <div className="h-full w-full flex place-items-center justify-center ">
                   <input
@@ -236,8 +305,7 @@ export default function DetailPage() {
                   <button
                     id="dropdownDefault"
                     style={{ transition: "all .15s ease" }}
-                    type="submit"
-                    value="submit"
+                    onClick={mintToken}
                     className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none h-full focus:ring-blue-300 font-medium rounded-lg text-sm text-center items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-full col-start-4"
                   >
                     Submit
@@ -253,7 +321,10 @@ export default function DetailPage() {
                 }
                 alt="test"
               />
-            </form>
+              <button onClick={addKtp}>GO</button>
+              <br />
+              <button onClick={findKTP}>GO</button>
+            </div>
           </div>
         </div>
       </div>

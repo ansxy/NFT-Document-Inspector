@@ -15,8 +15,10 @@ export default function PageFormKtp() {
       <div className="basis-auto">
         <NavBarNew />
       </div>
-      <FormKtp />
-      <div className="mt-auto">
+      <div className="h-auto">
+        <FormKtp />
+      </div>
+      <div className="">
         <Footer />
       </div>
     </div>
