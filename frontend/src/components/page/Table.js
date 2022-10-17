@@ -1,7 +1,5 @@
-import axios from "axios";
-import React, { useEffect, useMemo, useState } from "react";
+import React from "react";
 import { useTable } from "react-table";
-import DataTable from "../api/GetDataTable";
 export default function Table({ columns, data }) {
   const {
     getTableProps, // table props from react-table

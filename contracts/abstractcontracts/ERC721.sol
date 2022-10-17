@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.4;
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
-import "./IERC721.sol";
-import "./String.sol";
-import "./Address.sol";
+import "../interfaces/IERC721.sol";
+import "../contractlibraries/String.sol";
+import "../contractlibraries/Address.sol";
 
 abstract contract ERC721 is IERC721{
 // OpenZeppelin Contracts (last updated v4.7.0) (token/ERC721/ERC721.sol)
@@ -138,35 +138,20 @@ abstract contract ERC721 is IERC721{
         return _owners[tokenId] != address(0);
     }
 
-
-    /**
-     * @dev Safely mints `tokenId` and transfers it to `to`.
-     *
-     * Requirements:
-     *
-     * - `tokenId` must not exist.
-     * - If `to` refers to a smart contract, it must implement {IERC721Receiver-onERC721Received}, which is called upon a safe transfer.
-     *
-     * Emits a {Transfer} event.
-     */
-    function _safeMint(address to, uint256 tokenId) internal virtual {
-        _safeMint(to, tokenId, "");
-    }
-
     /**
      * @dev Same as {xref-ERC721-_safeMint-address-uint256-}[`_safeMint`], with an additional `data` parameter which is
      * forwarded in {IERC721Receiver-onERC721Received} to contract recipients.
      */
     function _safeMint(
         address to,
-        uint256 tokenId,
-        bytes memory data
+        uint256 tokenId
+        // bytes memory data
     ) internal virtual {
         _mint(to, tokenId);
-        require(
-            _checkOnERC721Received(address(0), to, tokenId, data),
-            "ERC721: transfer to non ERC721Receiver implementer"
-        );
+        // require(
+        //     _checkOnERC721Received(address(0), to, tokenId, data),
+        //     "ERC721: transfer to non ERC721Receiver implementer"
+        // );
     }
 
     /**

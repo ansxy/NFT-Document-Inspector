@@ -1,19 +1,19 @@
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Button from "./ConnectWallet";
-import NavLinks from "./NavLink";
 
 export default function NavBarNew() {
   const [haveMetamask, setHaveMetamask] = useState(true);
   const [accountAddress, setAccountAddress] = useState("");
-  const [accountBalance, setAccountBalance] = useState("");
   const [isConnected, setIsConnected] = useState(false);
-
+  const links = [
+    { name: "Form KTP", url: "/formktp" },
+    { name: "Form Sertikat Tanah", url: "/formsertifikattanah" },
+    { name: "Form Validator ", url: "/formvalidator" },
+  ];
   const { ethereum } = window;
   const provider = new ethers.providers.Web3Provider(window.ethereum);
-
-  console.log(accountAddress);
 
   useEffect(() => {
     const { ethereum } = window;
@@ -34,33 +34,44 @@ export default function NavBarNew() {
       const accounts = await ethereum.request({
         method: "eth_requestAccounts",
       });
-      let balance = await provider.getBalance(accounts[0]);
-      let bal = ethers.utils.formatEther(balance);
       setAccountAddress(accounts[0]);
-      setAccountBalance(bal);
       setIsConnected(true);
     } catch (error) {
       setIsConnected(false);
     }
   };
 
+  const HARDHAT_NETWORK_ID = "1337";
+
+  const checkNetwork = () => {
+    if (window.ethereum.networkVersion === HARDHAT_NETWORK_ID) {
+      return true;
+    }
+    alert("Please Connect To Hardhat LocalHost Network");
+    return false;
+  };
+
   return (
     <>
       {haveMetamask ? (
-        <nav className="bg-[-#0066FF]">
-          <div className="flex items-center font-medium justify-around">
-            <ul className="md:flex hidden uppercase items-center gap-44 px-5 rounded-b-2xl drop-shadow-lg bg-[#001577]">
-              <Link to="/" className="py-7 px-3 inline-block text-cyan-50">
-                Home
-              </Link>
-              {isConnected ? <></> : <></>}
-              {isConnected ? (
-                <NavLinks />
-              ) : (
-                <Button onClick={connectWallet()} />
-              )}
-            </ul>
-          </div>
+        <nav className="flex items-center font-medium justify-around">
+          <ul className="md:flex hidden uppercase items-center gap-44 px-5 rounded-b-2xl drop-shadow-lg bg-navbar">
+            <Link to="/" className="py-7 px-3 inline-block text-white">
+              Home
+            </Link>
+            {isConnected ? <></> : <></>}
+            {isConnected ? (
+              <>
+                {links.map((links) => (
+                  <li key={links.name} className="text-white">
+                    <Link to={links.url}>{links.name}</Link>
+                  </li>
+                ))}
+              </>
+            ) : (
+              <Button onClick={connectWallet()} />
+            )}
+          </ul>
         </nav>
       ) : (
         <p>Please Install MataMask</p>

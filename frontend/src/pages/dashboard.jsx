@@ -19,7 +19,7 @@ export default class Dashboard extends React.Component {
         <div className="basis-auto ">
           <NavBarNew />
         </div>
-        <div className="basis-auto mt-auto">
+        <div className="basis-auto flex mt-auto justify-center ">
           <SearchForm />
         </div>
         <div className="mt-auto">

@@ -25,9 +25,9 @@ export default function DropDown() {
         onClick={() => {
           dropDownShow ? closeDropDown() : openDropDown();
         }}
-        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-r-lg text-sm text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 p-1.5 rounded-r-lg text-sm text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 font-bold"
       >
-        Search KTP{" "}
+        KTP
         <svg
           className="ml-2 w-4 h-4"
           aria-hidden="true"
@@ -61,15 +61,7 @@ export default function DropDown() {
               href="/formktp"
               className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
-              Dashboard
-            </a>
-          </li>
-          <li>
-            <a
-              href="/formsertifikattanah"
-              className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              Settings
+              SERTIFIKAT TANAH
             </a>
           </li>
         </ul>

@@ -10,7 +10,7 @@ export default function NavLinks() {
   return (
     <>
       {links.map((links) => (
-        <li key={links.name} className="text-cyan-50">
+        <li key={links.name} className="text-white">
           <Link to={links.url}>{links.name}</Link>
         </li>
       ))}

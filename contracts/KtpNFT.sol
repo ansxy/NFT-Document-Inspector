@@ -9,15 +9,16 @@ contract KtpNFT is ERC721, Authorize {
 
     Counters.Counter private _tokenIdCounter;
 
-    constructor() ERC721("Kartu Tanda Penduduk", "KTP") {}
+    constructor() ERC721("Kartu Tanda Penduduk", "KTP") {
+        UsersAddress[msg.sender].isValid = true;
+        UsersAddress[msg.sender].role = 1;
+    }
 
-    function safeMint(address to, string memory uri) public SuperAdminOnly{
+    function safeMint(address to, string memory uri) public AdministratorOnly{
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
-        UsersAddress[msg.sender].isValid = true;
-        UsersAddress[msg.sender].role = 1;
     }
 
     function tokenURI(uint256 tokenId)

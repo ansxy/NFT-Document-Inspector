@@ -25,11 +25,12 @@ export default function FormKtp() {
   data = {
     addressWallet: "",
     nama: "",
-    kotaLahir: "",
-    provinsiKotaLahir: "",
+    kotaSekarang: "",
+    provinsiSekarang: "",
     kecamatan: "",
     idKecamatan: "",
     kelurahan: "",
+    kotaLahir: "",
     tanggalLahir: new Date(),
     statusPerkawinan: "",
     golonganDarah: "",
@@ -124,7 +125,7 @@ export default function FormKtp() {
   const onChangeSelectKab = (item) => {
     setFormData({
       ...formData,
-      kotaLahir: item.name.toUpperCase(),
+      kotaSekarang: item.name.toUpperCase(),
     });
     setkodeTempat({
       ...kodeTempat,
@@ -155,7 +156,7 @@ export default function FormKtp() {
 
   return (
     <>
-      <div className="flex justify-center overflow-auto">
+      <div className="flex justify-center">
         <div className="flex flex-col w-3/5 justify-start items-center">
           <div className="w-full flex items-center justify-center h-auto bg-white rounded-t-lg border-b-2 mt-10">
             <h2 className="text-black uppercase text-2xl m-5 font-bold">
@@ -278,7 +279,26 @@ export default function FormKtp() {
                 </div>
                 {/* Grid 2 in Section 1 */}
                 <div className="h-full w-full grid grid-cols-4 place-items-center gap-4">
-                  <div className="relative w-full col-span-2">
+                  <div className="mb-7 w-full">
+                    <label
+                      for="kotaLahir"
+                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    >
+                      Kota Lahir
+                    </label>
+                    <input
+                      name="kotaLahir"
+                      id="kotaLahir"
+                      value={formData.kotaLahir}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
+                    h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
+                    rounded-lg "
+                      placeholder="Kota Lahir"
+                      onInput={handleChange}
+                      required
+                    />
+                  </div>
+                  <div className="relative w-full col-span-1">
                     <div className="mb-7 w-full">
                       <label
                         for="tanggalLahir"

@@ -1,4 +1,4 @@
-import react, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import ReactSelect from "react-select";
@@ -8,7 +8,10 @@ import KtpNFT_address from "../../contracts/KtpNFT-address.json";
 import KtpInspector from "../../contracts/KtpInspector.json";
 import KtpInspectorAddress from "../../contracts/KtpInspector-address.json";
 import { setNftUri } from "../../utils/method";
+import * as IPFS from "ipfs-core";
 
+// "KtpNFT": "0xc1d223D3Ab63b0f8946d2ea6a950146520dd5A9F"
+const CryptoJS = require("crypto-js");
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
 const contractKtp = new ethers.Contract(
@@ -22,24 +25,37 @@ const contractInspector = new ethers.Contract(
   KtpInspector.abi,
   signer
 );
-console.log(contractInspector);
 
 export default function DetailPage() {
   const data = useLoaderData();
   const [uri, seturi] = useState("");
-  // const [status, setStatus] = useState(false)
+  const [CID, setCID] = useState();
 
-  // const getMintedStatus = async () => {
-  //   const result = await contractKtp.isContentOwned(uri);
-  //   console.log(result)
-  //   setStatus(result);
-  // };
+  const deployIPFS = async () => {
+    const encrypted = CryptoJS.AES.encrypt(
+      uri,
+      data.data.addressWallet
+    ).toString();
+    const blob = new Blob([encrypted], {
+      type: "application/json;charset=utf-8",
+    });
+    let ipfs = await IPFS.create({ repo: "KTP" + Math.random() });
+    return await ipfs.add(blob).then(setCID).then(ipfs.stop);
+  };
+
+  const getIPFS = async () => {
+    if (!CID) {
+      return alert("Not Ready Yet");
+    }
+    console.log(CID["path"]);
+  };
 
   const mintToken = async (e) => {
     e.preventDefault();
     const connection = contractKtp.connect(signer);
     const addr = connection.address;
-    const result = await contractKtp.safeMint(addr, uri);
+    // DONE: decrease gas fee by tons of it for the URI
+    const result = await contractKtp.safeMint(addr, CID["path"]);
     return result;
   };
   useEffect(() => {
@@ -53,30 +69,24 @@ export default function DetailPage() {
   const addKtp = async (e) => {
     e.preventDefault();
     const addr = data.data.addressWallet;
-    console.log(addr);
     const result = await contractInspector.addKtp(
       addr,
-      "0x878e1A62DA94Ce949F1adb47e4D87E5f4e369b16",
+      KtpNFT_address.KtpNFT,
       "64120231123",
-      uri
+      CID["path"]
     );
-    console.log(result);
-    return result;
+    await result.wait();
   };
 
   const findKTP = async (e) => {
     e.preventDefault();
-    try {
-      const connection = contractKtp.connect(signer);
-      const addr = connection.address;
-      console.log(addr);
-      const result = await contractInspector.findKtp(
-        "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266"
-      );
-      return result;
-    } catch (error) {
-      console.log(error);
-    }
+    // const connection = contractKtp.connect(signer);
+    const addr = await data.data.addressWallet;
+    console.log(addr);
+    const result = await contractInspector.findKtp(addr);
+    // await result.wait();
+    console.log(result);
+    return result;
   };
   return (
     <>
@@ -321,9 +331,35 @@ export default function DetailPage() {
                 }
                 alt="test"
               />
-              <button onClick={addKtp}>GO</button>
+              <button
+                onClick={
+                  // addKtp
+                  // encryptURI
+                  deployIPFS
+                }
+              >
+                encrypt
+              </button>
               <br />
-              <button onClick={findKTP}>GO</button>
+              <button
+                onClick={
+                  // findKTP
+                  getIPFS
+                }
+              >
+                GetIPFS
+              </button>
+              <br />
+              <button
+                onClick={
+                  // findKTP
+                  addKtp
+                }
+              >
+                ADD KTP
+              </button>
+              <br />
+              <button onClick={findKTP}>Find KTP</button>
             </div>
           </div>
         </div>

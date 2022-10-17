@@ -1,6 +1,3 @@
-import React from "react";
-import ReactSelect from "react-select";
-
 export const listPekerjaan = [
   "Belum Tidak Bekerja",
   "Mengurus Rumah Tangga",
