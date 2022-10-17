@@ -7,12 +7,14 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "migration-down": "node utils/rollback.js",
-    "psql": " flyctl postgres connect -a nft-document-inspector-db"
+    "psql": " flyctl postgres connect -a little-bush-2024-db"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "express-async-errors": "^3.1.1",

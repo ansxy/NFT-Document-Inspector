@@ -1,22 +1,27 @@
-const express = require('express');
-const path = require('path');
-require('express-async-errors');
+const express = require("express");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const path = require("path");
+require("express-async-errors");
 const app = express();
 
-const formKtpRouter = require('./controllers/form_ktp');
+const formKtpRouter = require("./controllers/form_ktp");
 
-const { PORT } = require('./utils/config');
-const { connectToDatabase } = require('./utils/db');
+const { PORT } = require("./utils/config");
+const { connectToDatabase } = require("./utils/db");
+const { application } = require("express");
 
 app.use(express.json());
-app.use(express.static('assets'));
-app.use('/api/formktp', formKtpRouter);
+app.use(bodyParser.json());
+app.use(cors());
+app.use(express.static("assets"));
+app.use("/api/formktp", formKtpRouter);
 
 const main = async () => {
   await connectToDatabase();
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
-}
+};
 
 main();

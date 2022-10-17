@@ -1,0 +1,9 @@
+// Props
+// name
+// type
+// id
+// value
+// onChange
+// placeholder
+// isRequired
+// className
