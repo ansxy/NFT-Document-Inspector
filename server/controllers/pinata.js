@@ -8,7 +8,11 @@ const pinata = pinataSDK(PINATA_API_KEY, PINATA_API_SECRET);
 const { FormKtp } = require("../models");
 const { authenticatePinata } = require("../utils/middleware");
 
-// pin to pinata
+/* pin to pinata
+
+require an addressWallet (string) in request body
+
+*/
 router.post("/", authenticatePinata, async (req, res) => {
   const { authenticated } = authenticatePinata();
   if (!authenticated) {
