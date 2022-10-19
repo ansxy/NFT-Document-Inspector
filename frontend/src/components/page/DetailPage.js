@@ -9,6 +9,7 @@ import KtpInspector from "../../contracts/KtpInspector.json";
 import KtpInspectorAddress from "../../contracts/KtpInspector-address.json";
 import { setNftUri } from "../../utils/method";
 import * as IPFS from "ipfs-core";
+import InputForm from "./InputForm";
 
 // "KtpNFT": "0xc1d223D3Ab63b0f8946d2ea6a950146520dd5A9F"
 const CryptoJS = require("crypto-js");
@@ -120,6 +121,15 @@ export default function DetailPage() {
                     name="nama"
                     id="nama"
                     disabled
+                    value={data.data.nama}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
+                  h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
+                  rounded-lg col-span-2"
+                  />
+                  <InputForm
+                    name="nama"
+                    id="nama"
+                    disabled="true"
                     value={data.data.nama}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                   h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500

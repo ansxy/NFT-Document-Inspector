@@ -19,6 +19,7 @@ import {
 } from "./BioDataSelect.js";
 import moment from "moment/moment.js";
 import axios from "axios";
+import InputForm from "./InputForm.js";
 
 export default function FormKtp() {
   let data = new FormData();
@@ -204,7 +205,6 @@ export default function FormKtp() {
                     </label>
                     <input
                       name="nama"
-                      id="nama"
                       value={formData.nama}
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                     h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
@@ -448,7 +448,15 @@ export default function FormKtp() {
                 {/* Grid 1 in Section 2 */}
                 <div className="h-full w-full grid grid-cols-4 place-items-center gap-4">
                   {/* Alamat */}
-                  <div className="mb-6 w-full col-span-2">
+                  <InputForm
+                    name="Alamat"
+                    value={formData.alamat}
+                    span="mb-6 w-full col-span-2"
+                    styleProps="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
+                    h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
+                    rounded-lg"
+                  />
+                  {/* <div className="mb-6 w-full col-span-2">
                     <label
                       for="statusPerkawinan"
                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
@@ -467,28 +475,16 @@ export default function FormKtp() {
                     h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
                     rounded-lg "
                     />
-                  </div>
+                  </div> */}
                   {/* Rukun Tetangga */}
-                  <div className="mb-6 w-full">
-                    <label
-                      for="statusPerkawinan"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                    >
-                      Rukun Tetangga
-                    </label>
-                    <input
-                      name="rukunTetangga"
-                      type="text"
-                      id="rt"
-                      value={formData.rukunTetangga}
-                      onChange={handleChange}
-                      placeholder="RT"
-                      required
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
+                  <InputForm
+                    name="Rukun Tetangga"
+                    value={formData.rukunTetangga}
+                    span="mb-6 w-full col-span-1"
+                    styleProps="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                     h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
                     rounded-lg"
-                    />
-                  </div>
+                  />
                   {/* Rukun Warga */}
                   <div className="mb-6 w-full">
                     <label
