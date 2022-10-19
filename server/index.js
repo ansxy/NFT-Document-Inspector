@@ -13,7 +13,7 @@ const { PORT } = require("./utils/config");
 const { connectToDatabase } = require("./utils/db");
 
 app.use(express.json());
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '50mb' }));
 app.use(cors());
 app.use(express.static("assets"));
 app.use("/api/formktp", formKtpRouter);

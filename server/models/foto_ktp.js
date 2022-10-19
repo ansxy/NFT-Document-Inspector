@@ -21,7 +21,7 @@ FotoKtp.init({
     },
   },
   imgString: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(50000),
     allowNull: false,
     validate: {
       notNull: {
