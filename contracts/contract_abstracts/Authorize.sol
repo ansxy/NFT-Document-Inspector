@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.4;
+
 abstract contract Authorize{
     struct account{
         bool isValid;
@@ -33,6 +34,11 @@ abstract contract Authorize{
         address indexed newUser
     );
     // ===
+
+    constructor(){
+        UsersAddress[msg.sender].isValid = true;
+        UsersAddress[msg.sender].role = 1;
+    }
 
     function addUser(address _address) public AdministratorOnly{
         require(UsersAddress[_address].role != 1 && UsersAddress[_address].role != 2 , "The Wallet Address must not admin or superadmin" );

@@ -1,17 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity ^0.8.3;
+pragma solidity ^0.8.4;
 
-import "./abstractcontracts/Authorize.sol";
+import "./contract_abstracts/Authorize.sol";
 
 contract KtpInspector is Authorize {
 
     mapping(address => KtpData) public UserToKtpData;
     address[] public ktpOwnerCounter;   
-
-    constructor(){
-        UsersAddress[msg.sender].isValid = true;
-        UsersAddress[msg.sender].role = 1;
-    }
 
     struct KtpData{
         bool Valid;
