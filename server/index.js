@@ -6,16 +6,17 @@ require("express-async-errors");
 const app = express();
 
 const formKtpRouter = require("./controllers/form_ktp");
+const pinataRouter = require("./controllers/pinata")
 
 const { PORT } = require("./utils/config");
 const { connectToDatabase } = require("./utils/db");
-const { application } = require("express");
 
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cors());
 app.use(express.static("assets"));
 app.use("/api/formktp", formKtpRouter);
+app.use("/api/pinata", pinataRouter);
 
 const main = async () => {
   await connectToDatabase();

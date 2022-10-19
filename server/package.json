@@ -7,11 +7,12 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "migration-down": "node utils/rollback.js",
-    "psql": " flyctl postgres connect -a little-bush-2024-db"
+    "psql": " flyctl postgres connect -a delicate-paper-9634-db"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@pinata/sdk": "^1.2.0",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.20.0",
     "cors": "^2.8.5",
