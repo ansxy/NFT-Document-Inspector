@@ -1,7 +1,13 @@
 import { useLocation } from "react-router-dom";
+import base64 from "react-native-base64";
 
 export default function Result() {
   const { state } = useLocation();
+  console.log(state);
+  const split = state[3].split(",").slice(1);
+  const decode = JSON.parse(base64.decode(split[0]));
+
+  console.log(decode);
   return (
     <>
       <div className="flex justify-center">
@@ -29,9 +35,9 @@ export default function Result() {
                     <input
                       name="addressWallet"
                       id="addressWallet"
+                      value={decode.addressWallet}
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
                     rounded-lg col-span-2"
-                      placeholder="addressWallet"
                       required
                     />
                   </div>
@@ -50,6 +56,7 @@ export default function Result() {
                       </label>
                       <input
                         name="nama"
+                        value={decode.nama}
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                     h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
                     rounded-lg "
@@ -68,6 +75,7 @@ export default function Result() {
                       <input
                         name="agama"
                         id="agama"
+                        value={decode.agama}
                         required
                         className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
           h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
@@ -84,6 +92,7 @@ export default function Result() {
                       <input
                         name="pekerjaan"
                         id="pekerjaan"
+                        value={decode.pekerjaan}
                         required
                         className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
           h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
@@ -102,6 +111,7 @@ export default function Result() {
                       <input
                         name="kotaLahir"
                         id="kotaLahir"
+                        value={decode.kotaLahir}
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                     h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
                     rounded-lg "
@@ -117,10 +127,11 @@ export default function Result() {
                           Tanggal Lahir
                         </label>
                         <input
-                          name="alamat"
+                          name="tanggalLahir"
                           type="text"
-                          id="alamat"
-                          placeholder="Alamat"
+                          id="tanggalLahir"
+                          value={decode.tanggalLahir}
+                          placeholder="tanggalLahir"
                           required
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                     h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
@@ -139,6 +150,7 @@ export default function Result() {
                       <input
                         name="jenisKelamin"
                         id="Kelamin"
+                        value={decode.jenisKelamin}
                         className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
           h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
                       />
@@ -154,6 +166,7 @@ export default function Result() {
                       <input
                         name="golonganDarah"
                         id="golonganDarah"
+                        value={decode.golonganDarah}
                         className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
           h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
                       />
@@ -171,6 +184,7 @@ export default function Result() {
                       <input
                         name="statusPerkawinan"
                         id="StatusPernikahan"
+                        value={decode.statusPerkawinan}
                         className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
          dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
                       />
@@ -185,6 +199,7 @@ export default function Result() {
                       <input
                         name="kewarganegaraan"
                         id="KewargaNegaraan"
+                        value={decode.kewarganegaraan}
                         className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
            dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
                       />
@@ -208,6 +223,7 @@ export default function Result() {
                         type="text"
                         id="alamat"
                         placeholder="Alamat"
+                        value={decode.alamat}
                         required
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                     h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
@@ -226,6 +242,7 @@ export default function Result() {
                         name="rukunTetangga"
                         type="text"
                         id="rt"
+                        value={decode.rukunTetangga}
                         placeholder="RT"
                         required
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
@@ -245,6 +262,7 @@ export default function Result() {
                         name="rukunWarga"
                         type="text"
                         id="rw"
+                        value={decode.rukunWarga}
                         placeholder="RW"
                         required
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
@@ -264,11 +282,12 @@ export default function Result() {
                         Provinsi Sekarang
                       </label>
                       <input
-                        name="alamat"
+                        name="provinsiKotaLahir"
                         type="text"
-                        id="alamat"
-                        placeholder="Alamat"
+                        id="provinsiKotaLahir"
+                        placeholder="provinsiKotaLahir"
                         required
+                        value={decode.provinsiKotaLahir}
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                     h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
                     rounded-lg "
@@ -282,10 +301,11 @@ export default function Result() {
                         Kecematan Sekarang
                       </label>
                       <input
-                        name="alamat"
+                        name="kotaLahir"
                         type="text"
-                        id="alamat"
-                        placeholder="Alamat"
+                        id="kotaLahir"
+                        placeholder="kotaLahir"
+                        value={decode.kotaLahir}
                         required
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                     h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
@@ -304,11 +324,12 @@ export default function Result() {
                         Kecamatan Sekarang
                       </label>
                       <input
-                        name="alamat"
+                        name="kecamatan"
                         type="text"
-                        id="alamat"
-                        placeholder="Alamat"
+                        id="kecamatan"
+                        placeholder="kecamatan"
                         required
+                        value={decode.kecamatan}
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                     h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
                     rounded-lg "
@@ -323,10 +344,11 @@ export default function Result() {
                         Kelurahan Sekarang
                       </label>
                       <input
-                        name="alamat"
+                        name="kelurahan"
                         type="text"
-                        id="alamat"
-                        placeholder="Alamat"
+                        id="kelurahan"
+                        placeholder="kelurahan"
+                        value={decode.kelurahan}
                         required
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                     h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500

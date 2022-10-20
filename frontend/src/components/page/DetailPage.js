@@ -10,7 +10,6 @@ import KtpInspectorAddress from "../../contracts/KtpInspector-address.json";
 import { setNftUri, getImgBytecode } from "../../utils/method";
 import axios from "axios";
 
-// "KtpNFT": "0xc1d223D3Ab63b0f8946d2ea6a950146520dd5A9F"
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
 const contractKtp = new ethers.Contract(
@@ -24,6 +23,7 @@ const contractInspector = new ethers.Contract(
   KtpInspector.abi,
   signer
 );
+console.log(contractInspector);
 
 export default function DetailPage() {
   const data = useLoaderData();
@@ -32,9 +32,9 @@ export default function DetailPage() {
   // const [dataKtp, setDataKtp] = useState(fotoktp);
   const mintToken = async (e) => {
     e.preventDefault();
-    const connection = contractKtp.connect(signer);
-    const addr = connection.address;
-    const result = await contractKtp.safeMint(addr, uri);
+    addFotoKtp()
+    await temp();
+    const result = await contractKtp.safeMint(data.data.addressWallet, uri);
     return result;
   };
 
@@ -75,6 +75,11 @@ export default function DetailPage() {
     }
   };
 
+  const temp = async () => {
+    const addUser = contractInspector.addUser(data.data.addressWallet);
+    return addUser;
+  };
+
   const nikGenerator = async (e) => {
     if (data.data.jenisKelamin === "LAKI-LAKI") {
       const day = data.data.tanggalLahir.split("-");
@@ -93,6 +98,7 @@ export default function DetailPage() {
         day[1] +
         year[1] +
         year[2] +
+        "-" +
         "0003";
       return nik;
     }
@@ -104,7 +110,7 @@ export default function DetailPage() {
       addr,
       KtpNFT_address.KtpNFT,
       nik,
-      ""
+      uri
     );
     await result.wait();
   };

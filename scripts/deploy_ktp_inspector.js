@@ -27,9 +27,8 @@ async function main() {
   await contract.deployed();
 
   const temp = await contract.isSuperAdmin(
-    "0x14dC79964da2C08b23698B3D3cc7Ca32193d9955"
+    "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
   );
-  console.log(temp);
 
   console.log("Contract address:", contract.address);
 

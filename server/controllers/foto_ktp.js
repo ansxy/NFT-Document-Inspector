@@ -18,16 +18,18 @@ router.get("/:addressWallet", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { addressWallet, imgString } = req.body;
-  if (!addressWallet || !imgString) {
-    return res.status(400).json({
-      error: "Masukkan address wallet dan string base64 dari fotonya!",
-    });
+  try {
+    const { addressWallet, imgString } = req.body;
+    if (!addressWallet || !imgString) {
+      return res.status(400).json({
+        error: "Masukkan address wallet dan string base64 dari fotonya!",
+      });
+    }
+    const fotoKtp = await FotoKtp.create(addressWallet, imgString);
+    return res.json(fotoKtp);
+  } catch (error) {
+    console.log(error);
   }
-  console.log(imgString);
-  return;
-  // const fotoKtp = await FotoKtp.create(addressWallet, imgString);
-  // return res.json(fotoKtp);
 });
 
 router.delete("/:addressWallet", async (req, res) => {
