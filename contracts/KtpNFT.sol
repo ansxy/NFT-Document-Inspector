@@ -7,12 +7,12 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 
 import "./contract_abstracts/Authorize.sol";
 
-contract NFTKTP is ERC721, ERC721URIStorage, Authorize {
+contract KtpNFT is ERC721, ERC721URIStorage, Authorize {
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounter;
 
-    constructor() ERC721("NFTKTP", "KTP") {}
+    constructor() ERC721("Kartu Tanda Penduduk", "KTP") {}
 
     function safeMint(address to, string memory uri) public AdministratorOnly {
         uint256 tokenId = _tokenIdCounter.current();
