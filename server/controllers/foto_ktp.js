@@ -30,6 +30,12 @@ router.post("/", async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+  try {
+    const fotoKtp = await FotoKtp.create({ ...req.body });
+    return res.json(fotoKtp);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 router.delete("/:addressWallet", async (req, res) => {
