@@ -42,9 +42,8 @@ const setNftUri = async (addressWallet, doc) => {
     if (statusValidasi === "DITERIMA") {
       return "Tidak bisa membuat NFT KTP";
     }
-    const foto = await getImgBytecode(namaFile, tipeMime, doc);
     const tanggalDibuat = new Date().toDateString();
-    const metadata = { ...data, foto, tanggalDibuat };
+    const metadata = { ...data,  tanggalDibuat };
     return (
       "data:application/json;base64," +
       Buffer.from(JSON.stringify(metadata)).toString("base64")

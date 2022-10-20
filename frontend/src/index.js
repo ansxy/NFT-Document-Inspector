@@ -7,6 +7,7 @@ import PageValidator from "./pages/P_Validator";
 import PageFormSertifikatTanah from "./pages/P_FormSertifikatTanah";
 import axios from "axios";
 import PageDetail from "./pages/P_DetailPage";
+import ResultPage from "./pages/P_ResultPage";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
         console.log(err);
       }
     },
+  },
+  {
+    element: <ResultPage />,
+    path: "/results",
   },
 ]);
 

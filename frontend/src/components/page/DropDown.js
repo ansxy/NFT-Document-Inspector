@@ -58,7 +58,7 @@ export default function DropDown() {
         >
           <li>
             <a
-              href="/formktp"
+              href="/results"
               className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               SERTIFIKAT TANAH

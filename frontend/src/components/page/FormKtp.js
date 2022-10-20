@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Async from "react-select/async";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { Popper, Arrow } from "react-popper";
 
 import {
   SelectAsyncPaginate,
@@ -19,14 +20,13 @@ import {
 } from "./BioDataSelect.js";
 import moment from "moment/moment.js";
 import axios from "axios";
-import InputForm from "./InputForm.js";
 
 export default function FormKtp() {
   let data = new FormData();
   data = {
     addressWallet: "",
     nama: "",
-    kotaSekarang: "",
+    // kotaSekarang: "",
     provinsiSekarang: "",
     kecamatan: "",
     idKecamatan: "",
@@ -56,6 +56,7 @@ export default function FormKtp() {
   const [formData, setFormData] = useState(data);
   const [kodeTempat, setkodeTempat] = useState(formAlamat);
   const [startDate, setStartDate] = useState(new Date());
+  const [underAgeStatus, setUnderAgeStatus] = useState(false);
 
   const date = new Date();
   const today = date.setDate(date.getDate() + 0);
@@ -68,6 +69,11 @@ export default function FormKtp() {
   };
 
   const handleDate = (e) => {
+    if (
+      moment(formData.tanggalLahir, "dd/MM/YYYY").fromNow().split(" ")[0] <= 16
+    ) {
+      return setUnderAgeStatus(true);
+    }
     setFormData({
       ...formData,
       tanggalLahir: e,
@@ -93,12 +99,10 @@ export default function FormKtp() {
     if (
       moment(formData.tanggalLahir, "dd/MM/YYYY").fromNow().split(" ")[0] <= 16
     ) {
-      alert("Umur Belum Mencukupi");
-    }
-    if (addresWalletEth.test(formData.addressWallet)) {
+      return setUnderAgeStatus(true);
+    } else if (addresWalletEth.test(formData.addressWallet)) {
       alert("AddressWallet Salah");
-    }
-    if (Object.values(formData).includes("")) {
+    } else if (Object.values(formData).includes("")) {
       alert("Silahkan Isi Form Dengan Benar");
     } else {
       try {
@@ -117,6 +121,7 @@ export default function FormKtp() {
     setFormData({
       ...formData,
       provinsiKotaLahir: item.name.toUpperCase(),
+      provinsiSekarang: item.name.toUpperCase(),
     });
     setkodeTempat({
       ...kodeTempat,
@@ -126,7 +131,7 @@ export default function FormKtp() {
   const onChangeSelectKab = (item) => {
     setFormData({
       ...formData,
-      kotaSekarang: item.name.toUpperCase(),
+      kotaLahir: item.name.toUpperCase(),
     });
     setkodeTempat({
       ...kodeTempat,
@@ -295,11 +300,10 @@ export default function FormKtp() {
                     rounded-lg "
                       placeholder="Kota Lahir"
                       onInput={handleChange}
-                      required
                     />
                   </div>
                   <div className="relative w-full col-span-1">
-                    <div className="mb-7 w-full">
+                    <div className="mb-7 w-full" name="containerTanggal">
                       <label
                         for="tanggalLahir"
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
@@ -312,6 +316,7 @@ export default function FormKtp() {
                         dateFormat="yyyy/MM/dd"
                         maxDate={today}
                         onChange={handleDate}
+                        onInputClick={() => setUnderAgeStatus(false)}
                         showYearDropdown
                         dropdownMode="select"
                         className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block
@@ -334,6 +339,11 @@ export default function FormKtp() {
                           ></path>
                         </svg>
                       </div>
+                      {!underAgeStatus ? (
+                        <></>
+                      ) : (
+                        <></>
+                      )}
                     </div>
                   </div>
                   {/* Jenis Kelamin */}
@@ -448,15 +458,7 @@ export default function FormKtp() {
                 {/* Grid 1 in Section 2 */}
                 <div className="h-full w-full grid grid-cols-4 place-items-center gap-4">
                   {/* Alamat */}
-                  <InputForm
-                    name="Alamat"
-                    value={formData.alamat}
-                    span="mb-6 w-full col-span-2"
-                    styleProps="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
-                    h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
-                    rounded-lg"
-                  />
-                  {/* <div className="mb-6 w-full col-span-2">
+                  <div className="mb-6 w-full col-span-2">
                     <label
                       for="statusPerkawinan"
                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
@@ -475,16 +477,28 @@ export default function FormKtp() {
                     h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
                     rounded-lg "
                     />
-                  </div> */}
+                  </div>
                   {/* Rukun Tetangga */}
-                  <InputForm
-                    name="Rukun Tetangga"
-                    value={formData.rukunTetangga}
-                    span="mb-6 w-full col-span-1"
-                    styleProps="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
+                  <div className="mb-6 w-full">
+                    <label
+                      for="rukunTetangga"
+                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    >
+                      Rukun Warga
+                    </label>
+                    <input
+                      name="rukunTetangga"
+                      type="text"
+                      id="rt"
+                      value={formData.rukunTetangga}
+                      onChange={handleChange}
+                      placeholder="RT"
+                      required
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                     h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
                     rounded-lg"
-                  />
+                    />
+                  </div>
                   {/* Rukun Warga */}
                   <div className="mb-6 w-full">
                     <label

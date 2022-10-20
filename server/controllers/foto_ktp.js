@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const bodyParser = require("body-parser");
 const { FotoKtp } = require("../models");
 
 router.get("/", async (req, res) => {
@@ -10,7 +11,7 @@ router.get("/:addressWallet", async (req, res) => {
   const fotoKtp = await FotoKtp.findByPk(req.params.addressWallet);
 
   if (!fotoKtp) {
-    return res.status(404).json({ error: 'foto tidak ditemukan!' });
+    return res.status(404).json({ error: "foto tidak ditemukan!" });
   }
 
   return res.json(fotoKtp);
@@ -19,17 +20,21 @@ router.get("/:addressWallet", async (req, res) => {
 router.post("/", async (req, res) => {
   const { addressWallet, imgString } = req.body;
   if (!addressWallet || !imgString) {
-    return res.status(400).json({ error: 'Masukkan address wallet dan string base64 dari fotonya!' });
+    return res.status(400).json({
+      error: "Masukkan address wallet dan string base64 dari fotonya!",
+    });
   }
-  const fotoKtp = await FotoKtp.create(addressWallet, imgString);
-  return res.json(fotoKtp);
+  console.log(imgString);
+  return;
+  // const fotoKtp = await FotoKtp.create(addressWallet, imgString);
+  // return res.json(fotoKtp);
 });
 
 router.delete("/:addressWallet", async (req, res) => {
   const fotoKtp = await FotoKtp.findByPk(req.params.addressWallet);
 
   if (!fotoKtp) {
-    return res.status(404).json({ error: 'foto tidak ditemukan!' });
+    return res.status(404).json({ error: "foto tidak ditemukan!" });
   }
 
   await fotoKtp.destroy();

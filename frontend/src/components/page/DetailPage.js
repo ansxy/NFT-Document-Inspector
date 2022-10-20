@@ -7,12 +7,10 @@ import KtpNFT from "../../contracts/KtpNFT.json";
 import KtpNFT_address from "../../contracts/KtpNFT-address.json";
 import KtpInspector from "../../contracts/KtpInspector.json";
 import KtpInspectorAddress from "../../contracts/KtpInspector-address.json";
-import { setNftUri } from "../../utils/method";
-import * as IPFS from "ipfs-core";
-import InputForm from "./InputForm";
+import { setNftUri, getImgBytecode } from "../../utils/method";
+import axios from "axios";
 
 // "KtpNFT": "0xc1d223D3Ab63b0f8946d2ea6a950146520dd5A9F"
-const CryptoJS = require("crypto-js");
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
 const contractKtp = new ethers.Contract(
@@ -30,68 +28,96 @@ const contractInspector = new ethers.Contract(
 export default function DetailPage() {
   const data = useLoaderData();
   const [uri, seturi] = useState("");
-  const [CID, setCID] = useState();
-
-  const deployIPFS = async () => {
-    const encrypted = CryptoJS.AES.encrypt(
-      uri,
-      data.data.addressWallet
-    ).toString();
-    const blob = new Blob([encrypted], {
-      type: "application/json;charset=utf-8",
-    });
-    let ipfs = await IPFS.create({ repo: "KTP" + Math.random() });
-    return await ipfs.add(blob).then(setCID).then(ipfs.stop);
-  };
-
-  const getIPFS = async () => {
-    if (!CID) {
-      return alert("Not Ready Yet");
-    }
-    console.log(CID["path"]);
-  };
-
+  const [fotoByte, setFotoByte] = useState("");
+  // const [dataKtp, setDataKtp] = useState(fotoktp);
   const mintToken = async (e) => {
     e.preventDefault();
     const connection = contractKtp.connect(signer);
     const addr = connection.address;
-    // DONE: decrease gas fee by tons of it for the URI
-    const result = await contractKtp.safeMint(addr, CID["path"]);
+    const result = await contractKtp.safeMint(addr, uri);
     return result;
   };
+
   useEffect(() => {
     const fetchData = async () => {
       const uri = await setNftUri(data.data.addressWallet, "ktp");
-      return seturi(uri);
+      const imgByteCode = await getImgBytecode(
+        data.data.namaFile,
+        data.data.tipeMime,
+        "ktp"
+      );
+
+      return [seturi(uri), setFotoByte(imgByteCode)];
     };
     fetchData();
-  }, [data.data.addressWallet]);
+  }, [data.data.addressWallet, data.data.namaFile, data.data.tipeMime]);
 
+  let fotoktp = new FormData();
+  fotoktp = {
+    addressWallet: data.data.addressWallet,
+    imgString: fotoByte,
+  };
+
+  const addFotoKtp = async (e) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      return await axios.post(
+        "http://localhost:3001/api/fotoktp",
+        fotoktp,
+        config
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const nikGenerator = async (e) => {
+    if (data.data.jenisKelamin === "LAKI-LAKI") {
+      const day = data.data.tanggalLahir.split("-");
+      const year = day[0].split("");
+      //TODO : Count System
+      const nik =
+        data.data.idKecamatan + day[2] + day[1] + year[1] + year[2] + "0003";
+      return nik;
+    } else {
+      const day = data.data.tanggalLahir.split("-");
+      const womanDay = parseInt(day[2]) + 40;
+      const year = day[0].split("");
+      const nik =
+        data.data.idKecamatan +
+        womanDay.toString() +
+        day[1] +
+        year[1] +
+        year[2] +
+        "0003";
+      return nik;
+    }
+  };
   const addKtp = async (e) => {
-    e.preventDefault();
     const addr = data.data.addressWallet;
+    const nik = await nikGenerator();
     const result = await contractInspector.addKtp(
       addr,
       KtpNFT_address.KtpNFT,
-      "64120231123",
-      CID["path"]
+      nik,
+      ""
     );
     await result.wait();
   };
 
   const findKTP = async (e) => {
     e.preventDefault();
-    // const connection = contractKtp.connect(signer);
     const addr = await data.data.addressWallet;
-    console.log(addr);
     const result = await contractInspector.findKtp(addr);
-    // await result.wait();
-    console.log(result);
     return result;
   };
   return (
     <>
-      <div className="flex  justify-center ">
+      <div className="flex justify-center ">
         <div className="flex flex-col w-3/5 justify-start items-center">
           <div className="w-full flex items-center justify-center h-auto bg-white rounded-t-lg border-b-2 mt-10">
             <h2 className="text-black uppercase text-2xl m-5 font-bold">
@@ -126,7 +152,7 @@ export default function DetailPage() {
                   h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
                   rounded-lg col-span-2"
                   />
-                  <InputForm
+                  {/* <InputForm
                     name="nama"
                     id="nama"
                     disabled="true"
@@ -134,7 +160,7 @@ export default function DetailPage() {
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                   h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
                   rounded-lg col-span-2"
-                  />
+                  /> */}
                   {/* Agama Select */}
                   <select
                     name="agama"
@@ -341,24 +367,9 @@ export default function DetailPage() {
                 }
                 alt="test"
               />
-              <button
-                onClick={
-                  // addKtp
-                  // encryptURI
-                  deployIPFS
-                }
-              >
-                encrypt
-              </button>
+              <button onClick={addFotoKtp}>encrypt</button>
               <br />
-              <button
-                onClick={
-                  // findKTP
-                  getIPFS
-                }
-              >
-                GetIPFS
-              </button>
+              <button onClick={nikGenerator}>GetIPFS</button>
               <br />
               <button
                 onClick={
