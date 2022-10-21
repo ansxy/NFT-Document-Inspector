@@ -42,12 +42,24 @@ module.exports = {
           },
         },
       },
-      provinsi_kota_lahir: {
+      kota_alamat_sekarang: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
           notNull: {
-            msg: "Tolong masukkan provinsi dari kota kelahiran anda!",
+            msg: "Tolong masukkan kota alamat sekarang!",
+          },
+          isUppercase: {
+            msg: "Masukkan data berupa huruf kapital!",
+          },
+        },
+      },
+      provinsi_alamat_sekarang: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: "Tolong masukkan provinsi dari kota alamat sekarang!",
           },
           isUppercase: {
             msg: "Masukkan data berupa huruf kapital!",

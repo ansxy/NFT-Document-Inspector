@@ -4,7 +4,6 @@ import { ethers } from "ethers";
 import KtpInspector from "../../contracts/KtpInspector.json";
 import KtpInspectorAddress from "../../contracts/KtpInspector-address.json";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
@@ -26,7 +25,6 @@ export default function SearchForm() {
         console.log("Please enter address");
       } else {
         setLoading(false);
-        // const byteImg = await axios.get(`http://localhost:3001/api/fotoktp/`)
         const result = await contractInspector.findKtp(address);
         return navigate("/results", { state: result });
       }
@@ -35,7 +33,6 @@ export default function SearchForm() {
       setModalStatus(false);
     }
   };
-  console.log(address);
   return (
     <>
       <div className="w-full h-full flex flex-nowrap justify-center ">

@@ -3,7 +3,6 @@ import Footer from "../components/page/Footer";
 import NavBarNew from "../components/page/NavBarFunc";
 import backgroundSvg from "../bcgr.svg";
 import "../index.css";
-import { useLocation } from "react-router-dom";
 import Result from "../components/page/Result";
 
 export default function ResultPage() {

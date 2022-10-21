@@ -19,7 +19,7 @@ module.exports = {
         },
       },
       img_string: {
-        type: DataTypes.STRING(50000),
+        type: DataTypes.STRING(500000),
         allowNull: false,
         validate: {
           notNull: {

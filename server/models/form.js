@@ -45,12 +45,24 @@ FormKtp.init(
         },
       },
     },
-    provinsiKotaLahir: {
+    kotaAlamatSekarang: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notNull: {
-          msg: "Tolong masukkan provinsi dari kota kelahiran anda!",
+          msg: "Tolong masukkan kota alamat sekarang!",
+        },
+        isUppercase: {
+          msg: "Masukkan data berupa huruf kapital!",
+        },
+      },
+    },
+    provinsiAlamatSekarang: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: "Tolong masukkan provinsi dari kota alamat sekarang!",
         },
         isUppercase: {
           msg: "Masukkan data berupa huruf kapital!",

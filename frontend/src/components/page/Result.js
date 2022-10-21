@@ -1,13 +1,23 @@
 import { useLocation } from "react-router-dom";
 import base64 from "react-native-base64";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 export default function Result() {
   const { state } = useLocation();
-  console.log(state);
+  const [imgByte, setImgByte] = useState("");
   const split = state[3].split(",").slice(1);
   const decode = JSON.parse(base64.decode(split[0]));
 
-  console.log(decode);
+  useEffect(() => {
+    const fetchData = async () => {
+      const byteImg = await axios.get(
+        `http://localhost:3001/api/fotoktp/${decode.addressWallet}`
+      );
+      return setImgByte(byteImg);
+    };
+    fetchData();
+  }, [decode.addressWallet]);
   return (
     <>
       <div className="flex justify-center">
@@ -367,7 +377,17 @@ export default function Result() {
                       >
                         Foto 3x4
                       </label>
-                      <div className="bg-black w-[22.125rem] h-[29.5rem]"></div>
+                      <div className="bg-black w-[22.125rem] h-[29.5rem] flex">
+                        {imgByte ? (
+                          <img
+                            src={imgByte.data.imgString}
+                            alt="ktp"
+                            className="object-cover"
+                          />
+                        ) : (
+                          <></>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
