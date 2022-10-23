@@ -12,17 +12,16 @@ const { PORT } = require("./utils/config");
 const { connectToDatabase } = require("./utils/db");
 
 app.use(express.json());
-app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.json({ limit: "50mb" }));
 app.use(cors());
+app.use(express.static("build"));
 app.use(express.static("assets"));
 app.use("/api/formktp", formKtpRouter);
 app.use("/api/fotoktp", fotoKtpRouter);
 
 const main = async () => {
   await connectToDatabase();
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
+  app.listen(PORT);
 };
 
 main();

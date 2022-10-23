@@ -2,9 +2,13 @@
 pragma solidity ^0.8.4;
 
 import "./contract_abstracts/Authorize.sol";
+import "./stringUtils.sol";
 
 contract KtpInspector is Authorize {
 
+    using strings for *;
+
+    mapping(string => uint16) public NIKCount;
     mapping(address => KtpData) public UserToKtpData;
     address[] public ktpOwnerCounter;   
 
@@ -45,14 +49,20 @@ contract KtpInspector is Authorize {
     }
 
     function addKtp (address Owner,address nftKtp, string memory DataNik, string memory Ipfs_Uri) public AdministratorOnly{
-        require(isUser(Owner),"Owner not registered yet!");
+        require(UsersAddress[Owner].isValid,"Owner not registered yet!");
         require(!UserToKtpData[Owner].Valid,"There's Already KTP Data");
         ktpOwnerCounter.push(Owner);
         KtpData storage newKTP = UserToKtpData[Owner];
-        newKTP.NIK = DataNik;
         newKTP.NftAddress = nftKtp;
         newKTP.Ktp_Uri = Ipfs_Uri;
         newKTP.Valid = true;
+
+        strings.slice memory d = DataNik.toSlice();
+        strings.slice memory part;
+        d.split("-".toSlice(), part);
+        NIKCount[part.toString()]+=1;
+        newKTP.NIK = part.concat(d);
+
         emit KtpAdded(msg.sender,Owner);
     }
 
@@ -68,5 +78,12 @@ contract KtpInspector is Authorize {
         require(UserToKtpData[Owner].Valid,"KTP not found"); 
         delete UserToKtpData[Owner]; 
         emit KtpRemoved(msg.sender,Owner);
+    }
+
+    function getNIKCount(string memory NIK) public view AdministratorOnly returns(uint16) {
+        strings.slice memory d = NIK.toSlice();
+        strings.slice memory NIKParts;
+        d.split("-".toSlice(), NIKParts);
+        return NIKCount[NIKParts.toString()];
     }
 }

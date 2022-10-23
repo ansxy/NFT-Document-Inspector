@@ -12,7 +12,7 @@ contract KtpNFT is ERC721, ERC721URIStorage, Authorize {
 
     Counters.Counter private _tokenIdCounter;
 
-    constructor() ERC721("KtpNFT", "KTP") {}
+    constructor() ERC721("Kartu Tanda Penduduk", "KTP") {}
 
     function safeMint(address to, string memory uri) public AdministratorOnly {
         uint256 tokenId = _tokenIdCounter.current();

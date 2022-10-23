@@ -50,4 +50,28 @@ router.post("/", ktpImgStorage.single("file"), async (req, res) => {
   }
 });
 
+router.delete("/:addressWallet", async (req, res) => {
+  const ktpData = await FormKtp.findByPk(req.params.addressWallet);
+  if (!ktpData) {
+    return res.status(404).end();
+  }
+  await req.ktpData.destroy();
+  return res.status(204).end();
+});
+
+router.put("/:addressWallet", async (req, res) => {
+  const ktpData = await FormKtp.findByPk(req.params.addressWallet);
+  if (!ktpData) {
+    return res.status(404).end();
+  }
+  const keys = Object.keys(body);
+
+  keys.forEach(async (key, index) => {
+    ktpData[key] = req.body[key];
+    await ktpData.save();
+  });
+
+  return res.json(ktpData);
+});
+
 module.exports = router;

@@ -1,29 +1,25 @@
 import { useEffect, useState } from "react";
 import { useLoaderData } from "react-router-dom";
-import DatePicker from "react-datepicker";
-import ReactSelect from "react-select";
 import { ethers } from "ethers";
 import KtpNFT from "../../contracts/KtpNFT.json";
 import KtpNFT_address from "../../contracts/KtpNFT-address.json";
 import KtpInspector from "../../contracts/KtpInspector.json";
-import KtpInspectorAddress from "../../contracts/KtpInspector-address.json";
 import { setNftUri, getImgBytecode } from "../../utils/method";
 import axios from "axios";
 
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
 const contractKtp = new ethers.Contract(
-  KtpNFT_address.KtpNFT,
+  process.env.REACT_APP_KTP_NFT,
   KtpNFT.abi,
   signer
 );
 
 const contractInspector = new ethers.Contract(
-  KtpInspectorAddress.KtpInspector,
+  process.env.REACT_APP_KTP_INSPECTOR,
   KtpInspector.abi,
   signer
 );
-console.log(contractInspector);
 
 export default function DetailPage() {
   const data = useLoaderData();
@@ -34,6 +30,7 @@ export default function DetailPage() {
   const [mintingKTP, setmintingKTP] = useState(false);
   const [addNFT, setaddNFT] = useState(false);
   const [isLoading, setLoading] = useState(true);
+  const [modalStatus, setModalStatus] = useState(false);
   const mintToken = async (e) => {
     e.preventDefault();
     setLoading(false);
@@ -68,7 +65,10 @@ export default function DetailPage() {
 
   const addFotoKtp = async (e) => {
     try {
-      return await axios.post("http://localhost:3001/api/fotoktp", fotoktp);
+      return await axios.post(
+        `${process.env.REACT_APP_BASE_URL}api/fotoktp`,
+        fotoktp
+      );
     } catch (error) {
       setAddFotoStatus(true);
       console.log(error);
@@ -716,6 +716,50 @@ export default function DetailPage() {
             </div>
           </div>
         </div>
+      )}
+      {modalStatus ? (
+        <></>
+      ) : (
+        <>
+          <div
+            id="popup-modal"
+            class="overflow-y-auto overflow-x-hidden fixed flex justify-center  backdrop-blur-sm place-items-center md:inset-0 h-modal md:h-full"
+          >
+            <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+              <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <div class="p-6 text-center">
+                  <svg
+                    aria-hidden="true"
+                    class="mx-auto mb-4 w-14 h-14 text-gray-400 dark:text-gray-200"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                  <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                    Abaikan Gambar 3x4 yang hitam tidak ada $$$ untuk menyimpan
+                    gambar
+                  </h3>
+                  <button
+                    data-modal-toggle="popup-modal"
+                    onClick={() => setModalStatus(true)}
+                    type="button"
+                    class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
       )}
     </>
   );

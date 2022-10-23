@@ -34,20 +34,31 @@ export default function NavBarNew() {
       const accounts = await ethereum.request({
         method: "eth_requestAccounts",
       });
+
+      if (!checkNetwork()) {
+        return;
+      }
       setAccountAddress(accounts[0]);
+      window.ethereum.on("accountChanged", ([newAddress]) => {
+        if (newAddress === undefined) {
+          return setAccountAddress("");
+        }
+        setAccountAddress(newAddress);
+      });
       setIsConnected(true);
     } catch (error) {
       setIsConnected(false);
     }
   };
 
-  const HARDHAT_NETWORK_ID = "1337";
+  // const HARDHAT_NETWORK_ID = "1337";
+  const GOERLI_NETWORK_ID = "5";
 
   const checkNetwork = () => {
-    if (window.ethereum.networkVersion === HARDHAT_NETWORK_ID) {
+    if (window.ethereum.networkVersion === GOERLI_NETWORK_ID) {
       return true;
     }
-    alert("Please Connect To Hardhat LocalHost Network");
+    alert("Please Connect To Goerli Test Network");
     return false;
   };
 

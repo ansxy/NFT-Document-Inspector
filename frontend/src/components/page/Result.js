@@ -12,7 +12,7 @@ export default function Result() {
   useEffect(() => {
     const fetchData = async () => {
       const byteImg = await axios.get(
-        `http://localhost:3001/api/fotoktp/${decode.addressWallet}`
+        `${process.env.REACT_APP_BASE_URL}api/fotoktp/${decode.addressWallet}`
       );
       return setImgByte(byteImg);
     };

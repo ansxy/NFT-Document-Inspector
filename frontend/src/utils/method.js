@@ -1,17 +1,22 @@
 const axios = require("axios");
 window.Buffer = window.Buffer || require("buffer").Buffer;
-const baseUrl = "http://localhost:3001";
 
-const getImgBytecode = async (filename, mimetype, doc) => {
+export const getImgBytecode = async (filename, mimetype, doc) => {
   try {
     let img;
     doc === "ktp"
-      ? (img = await axios.get(`${baseUrl}/ktp/${filename}`, {
-          responseType: "arraybuffer",
-        }))
-      : (img = await axios.get(`${baseUrl}/sertifikattanah/${filename}`, {
-          responseType: "arraybuffer",
-        }));
+      ? (img = await axios.get(
+          `${process.env.REACT_APP_BASE_URL}ktp/${filename}`,
+          {
+            responseType: "arraybuffer",
+          }
+        ))
+      : (img = await axios.get(
+          `${process.env.REACT_APP_BASE_URL}sertifikattanah/${filename}`,
+          {
+            responseType: "arraybuffer",
+          }
+        ));
 
     return (
       `data:${mimetype};base64,` + Buffer.from(img.data).toString("base64")
@@ -21,13 +26,15 @@ const getImgBytecode = async (filename, mimetype, doc) => {
   }
 };
 
-const setNftUri = async (addressWallet, doc) => {
+export const setNftUri = async (addressWallet, doc) => {
   try {
     let res;
     doc === "ktp"
-      ? (res = await axios.get(`${baseUrl}/api/formktp/${addressWallet}`))
+      ? (res = await axios.get(
+          `${process.env.REACT_APP_BASE_URL}api/formktp/${addressWallet}`
+        ))
       : (res = await axios.get(
-          `${baseUrl}/api/formsertifikattanah/${addressWallet}`
+          `${process.env.REACT_APP_BASE_URL}api/formsertifikattanah/${addressWallet}`
         ));
 
     const {
@@ -43,7 +50,7 @@ const setNftUri = async (addressWallet, doc) => {
       return "Tidak bisa membuat NFT KTP";
     }
     const tanggalDibuat = new Date().toDateString();
-    const metadata = { ...data,  tanggalDibuat };
+    const metadata = { ...data, tanggalDibuat };
     return (
       "data:application/json;base64," +
       Buffer.from(JSON.stringify(metadata)).toString("base64")
@@ -53,4 +60,4 @@ const setNftUri = async (addressWallet, doc) => {
   }
 };
 
-module.exports = { getImgBytecode, setNftUri };
+export default (getImgBytecode, setNftUri);

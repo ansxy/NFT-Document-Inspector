@@ -2,25 +2,24 @@ import React from "react";
 import Footer from "../components/page/Footer";
 import NavBarNew from "../components/page/NavBarFunc";
 import backgroundSvg from "../bcgr.svg";
-import SearchForm from "../components/page/searchForm";
 import "../index.css";
+import { Outlet } from "react-router-dom";
 
 export default function Dashboard() {
-
   return (
     <div
-      className="flex flex-col h-screen bg-cover"
+      className="flex flex-col h-auto bg-cover min-h-screen "
       style={{ backgroundImage: `url(${backgroundSvg})` }}
     >
-      <div className="basis-auto ">
+      <header className="basis-auto ">
         <NavBarNew />
+      </header>
+      <div className="basis-auto">
+        <Outlet />
       </div>
-      <div className="basis-auto flex mt-auto justify-center ">
-        <SearchForm />
-      </div>
-      <div className="mt-auto">
+      <footer className="mt-auto bg-[#0066FF] flex justify-center text-white font-semibold">
         <Footer />
-      </div>
+      </footer>
     </div>
   );
 }

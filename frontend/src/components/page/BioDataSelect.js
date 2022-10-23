@@ -89,12 +89,11 @@ export const listPekerjaan = [
 ].map((it) => it.toUpperCase());
 export const listAgama = [
   "ISLAM",
-  "KRISTEN KATOLIK",
+  "KATOLIK",
   "KRISTEN PROTESTAN",
   "HINDU",
   "BUDDHA",
   "KONGHUCU",
-  "JAWA",
 ];
 
 export const jenisKelamin = ["LAKI-LAKI", "PEREMPUAN"];

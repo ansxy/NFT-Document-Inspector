@@ -3,11 +3,9 @@ import PropTypes from "prop-types";
 import { AsyncPaginate } from "react-select-async-paginate";
 import axios from "axios";
 
-
-
 export const SelectAsyncProvinsi = async (params) => {
   return await axios
-    .get(`http://www.emsifa.com/api-wilayah-indonesia/api/provinces.json`)
+    .get(`https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json`)
     .then((response) => {
       const data = response.data;
       return data;
@@ -22,11 +20,9 @@ export const SelectAsyncPaginate = (props) => {
   }, [props.regionId]);
 
   const loadOptions = async (searchQuery, { page }) => {
-    console.log(`loading page:${page} - limit: 10`);
-    console.log(provId);
     return await axios
       .get(
-        `http://www.emsifa.com/api-wilayah-indonesia/api/regencies/${provId}.json`
+        `https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${provId}.json`
       )
       .then((response) => {
         const data = response.data;
@@ -77,10 +73,9 @@ export const SelectAsyncPaginateKec = (props) => {
   }, [props.kabKotaId]);
 
   const loadOptions = async (searchQuery, loadedOptions, { page }) => {
-    // console.log(`loading page:${page} - limit: 10`);
     return await axios
       .get(
-        `http://www.emsifa.com/api-wilayah-indonesia/api/districts/${kecematanId}.json`
+        `https://www.emsifa.com/api-wilayah-indonesia/api/districts/${kecematanId}.json`
       )
       .then((response) => {
         const data = response.data;
@@ -131,10 +126,9 @@ export const SelectAsyncPaginateKel = (props) => {
     setkelurhanaId(props.kelId);
   }, [props.kelId]);
   const loadOptions = async (searchQuery, loadedOptions, { page }) => {
-    console.log(`loading page:${page} - limit: 10`);
     return await axios
       .get(
-        `http://www.emsifa.com/api-wilayah-indonesia/api/villages/${kelurhanaId}.json`
+        `https://www.emsifa.com/api-wilayah-indonesia/api/villages/${kelurhanaId}.json`
       )
       .then((response) => {
         const data = response.data;
