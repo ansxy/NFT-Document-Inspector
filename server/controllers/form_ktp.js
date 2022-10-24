@@ -8,7 +8,7 @@ const { FormKtp } = require("../models");
 // TODO : it need wait till all data is correct then put image in assets
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(process.cwd(), "assets/ktp"));
+    cb(null, "../assets/ktp");
   },
   filename: (req, file, cb) => {
     const { addressWallet } = req.body;

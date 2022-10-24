@@ -4,21 +4,21 @@ import { ethers } from "ethers";
 import KtpInspector from "../../contracts/KtpInspector.json";
 import { useNavigate } from "react-router-dom";
 
-const provider = new ethers.providers.Web3Provider(window.ethereum);
-const signer = provider.getSigner();
-const contractInspector = new ethers.Contract(
-  process.env.REACT_APP_KTP_INSPECTOR,
-  KtpInspector.abi,
-  signer
-);
-
 export default function SearchForm() {
   const [modalStatus, setModalStatus] = useState(true);
   const [loading, setLoading] = useState(true);
   const [address, setAddress] = useState("");
   const navigate = useNavigate();
+
   const findKTP = async (e) => {
     e.preventDefault();
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const contractInspector = new ethers.Contract(
+      process.env.REACT_APP_KTP_INSPECTOR,
+      KtpInspector.abi,
+      signer
+    );
     try {
       if (address === undefined) {
         console.log("Please enter address");

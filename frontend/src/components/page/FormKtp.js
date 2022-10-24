@@ -156,8 +156,8 @@ export default function FormKtp() {
         setSuccess(true);
         return ktp;
       } catch (err) {
-        setLoading(false);
-        console.log(err);
+        setLoading(true);
+        alert("AddressWallet Sudah Pernah Didaftarkan");
       }
     }
   };

@@ -7,20 +7,6 @@ import KtpInspector from "../../contracts/KtpInspector.json";
 import { setNftUri, getImgBytecode } from "../../utils/method";
 import axios from "axios";
 
-const provider = new ethers.providers.Web3Provider(window.ethereum);
-const signer = provider.getSigner();
-const contractKtp = new ethers.Contract(
-  process.env.REACT_APP_KTP_NFT,
-  KtpNFT.abi,
-  signer
-);
-
-const contractInspector = new ethers.Contract(
-  process.env.REACT_APP_KTP_INSPECTOR,
-  KtpInspector.abi,
-  signer
-);
-
 export default function DetailPage() {
   const data = useLoaderData();
   const [uri, seturi] = useState("");
@@ -31,15 +17,42 @@ export default function DetailPage() {
   const [addNFT, setaddNFT] = useState(false);
   const [isLoading, setLoading] = useState(true);
   const [modalStatus, setModalStatus] = useState(false);
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const contractKtp = new ethers.Contract(
+    process.env.REACT_APP_KTP_NFT,
+    KtpNFT.abi,
+    signer
+  );
+
+  const contractInspector = new ethers.Contract(
+    process.env.REACT_APP_KTP_INSPECTOR,
+    KtpInspector.abi,
+    signer
+  );
   const mintToken = async (e) => {
     e.preventDefault();
-    setLoading(false);
-    addFotoKtp();
-    await temp();
+    try {
+      setLoading(false);
+      addFotoKtp();
+      await temp();
+      await minting();
+      setmintingKTP(true);
+      await addKtp();
+      setaddNFT(true);
+    } catch (error) {
+      if (error.code === "ACTION_REJECTED") {
+        alert("Transaksi Dibatalkan");
+        setModalStatus(false);
+      }
+      alert("KTP SUDAH ADA DI BLOCKCHAIN");
+      setModalStatus(false);
+    }
+  };
+
+  const minting = async () => {
     const result = await contractKtp.safeMint(data.data.addressWallet, uri);
-    setmintingKTP(true);
-    await addKtp();
-    setaddNFT(true);
     return result;
   };
 
