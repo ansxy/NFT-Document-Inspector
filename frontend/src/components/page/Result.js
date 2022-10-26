@@ -8,6 +8,7 @@ export default function Result() {
   const [imgByte, setImgByte] = useState("");
   const split = state[3].split(",").slice(1);
   const decode = JSON.parse(base64.decode(split[0]));
+  console.log(decode);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -297,7 +298,7 @@ export default function Result() {
                         id="provinsiKotaLahir"
                         placeholder="provinsiKotaLahir"
                         required
-                        value={decode.provinsiKotaLahir}
+                        value={decode.provinsiAlamatSekarang}
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                     h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
                     rounded-lg "
@@ -315,7 +316,7 @@ export default function Result() {
                         type="text"
                         id="kotaLahir"
                         placeholder="kotaLahir"
-                        value={decode.kotaLahir}
+                        value={decode.kotaAlamatSekarang}
                         required
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                     h-5/6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500

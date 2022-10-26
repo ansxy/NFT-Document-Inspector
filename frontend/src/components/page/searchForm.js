@@ -63,7 +63,8 @@ export default function SearchForm() {
                         ></path>
                       </svg>
                       <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                        Your KTP not in our Blockchain
+                        KTP anda belum terdaftar di blockchain / Anda bukan
+                        owner dari KTP
                       </h3>
                       <button
                         data-modal-toggle="popup-modal"
